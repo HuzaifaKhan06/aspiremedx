@@ -49,7 +49,7 @@ export default function Footer() {
 
         <div className="mt-10 flex flex-col gap-2 border-t border-[var(--color-line)] pt-6 text-xs text-[var(--color-muted)] sm:flex-row sm:justify-between">
           <p>© {new Date().getFullYear()} AspireMedX. All rights reserved.</p>
-          <p>Demo build  content and figures are placeholders.</p>
+          <p>Demo build — content and figures are placeholders.</p>
         </div>
       </div>
     </footer>

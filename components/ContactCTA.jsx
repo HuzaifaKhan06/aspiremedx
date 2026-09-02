@@ -8,7 +8,7 @@ export default function ContactCTA() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    // Demo only  no backend wired up yet. Replace with a real API call
+    // Demo only — no backend wired up yet. Replace with a real API call
     // (e.g. POST to /api/consultation) once the backend is ready.
     setSubmitted(true);
   }
@@ -25,7 +25,7 @@ export default function ContactCTA() {
           </h2>
           <p className="mt-4 max-w-md text-[var(--color-muted)]">
             Tell us about your practice and we&apos;ll walk you through how your
-            billing would run on AspireMedX  no commitment required.
+            billing would run on AspireMedX — no commitment required.
           </p>
 
           <dl className="mt-10 space-y-3 text-sm">
@@ -51,7 +51,7 @@ export default function ContactCTA() {
                 Request received
               </p>
               <p className="mt-2 text-sm text-[var(--color-muted)]">
-                This is a demo confirmation  no email was actually sent yet.
+                This is a demo confirmation — no email was actually sent yet.
               </p>
             </div>
           ) : (

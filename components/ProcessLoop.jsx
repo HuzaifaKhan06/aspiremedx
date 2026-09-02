@@ -1,7 +1,7 @@
 import { processSteps } from "@/lib/content";
 
 // Five points evenly spaced around a circle (r=120, center 160,160),
-// starting at the top  one point per stage of the revenue cycle.
+// starting at the top — one point per stage of the revenue cycle.
 const NODE_POSITIONS = [
   { x: 160, y: 40 },
   { x: 274, y: 123 },
@@ -22,7 +22,7 @@ export default function ProcessLoop() {
             One claim, five checkpoints, no gaps.
           </h2>
           <p className="mt-4 text-[var(--color-muted)]">
-            Every claim moves through the same cycle  a claim only leaves a
+            Every claim moves through the same cycle — a claim only leaves a
             stage once it&apos;s actually ready for the next one.
           </p>
         </div>
@@ -39,7 +39,7 @@ export default function ProcessLoop() {
                 strokeWidth="2"
                 strokeDasharray="2 8"
               />
-              {/* orbiting marker  paused automatically for reduced-motion users via globals.css */}
+              {/* orbiting marker — paused automatically for reduced-motion users via globals.css */}
               <g className="orbit-spin" style={{ transformOrigin: "160px 160px" }}>
                 <circle cx="160" cy="40" r="5" fill="var(--color-amber)" />
               </g>

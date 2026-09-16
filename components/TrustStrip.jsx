@@ -2,16 +2,16 @@ import { practiceTypes } from "@/lib/content";
 
 export default function TrustStrip() {
   return (
-    <section className="border-y border-[var(--color-line)] bg-white py-8">
+    <section className="border-y border-[var(--color-line)] bg-[var(--color-bg)] py-8">
       <div className="mx-auto max-w-6xl px-6">
-        <p className="mb-5 text-center font-mono text-xs uppercase tracking-wider text-[var(--color-muted)]">
-          Built for practices like yours
+        <p className="mb-5 text-center font-mono text-xs font-semibold uppercase tracking-widest text-[var(--color-muted)]">
+          Built for organizations like yours
         </p>
-        <ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3">
+        <ul className="flex flex-wrap items-center justify-center gap-3">
           {practiceTypes.map((type) => (
             <li
               key={type}
-              className="text-sm font-medium text-[var(--color-navy)]/70"
+              className="rounded-full border border-[var(--color-line)] bg-white px-4 py-2 text-xs font-semibold text-[var(--color-navy)] shadow-sm"
             >
               {type}
             </li>

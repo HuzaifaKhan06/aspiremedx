@@ -1,11 +1,10 @@
-import { Fraunces, Inter, IBM_Plex_Mono } from "next/font/google";
+import { Manrope, Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  style: ["normal", "italic"],
+  weight: ["600", "700", "800"],
 });
 
 const inter = Inter({
@@ -21,16 +20,16 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata = {
-  title: "AspireMedX | Medical Billing & Revenue Cycle Management",
+  title: "AspireMedX | Smart Revenue Cycle Solutions",
   description:
-    "AspireMedX helps healthcare practices get paid faster with automated medical billing, coding, denial management, and revenue cycle analytics.",
+    "AspireMedX delivers enterprise-grade medical billing, credentialing, revenue cycle management, denial management, and A/R management for healthcare organizations.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${fraunces.variable} ${inter.variable} ${plexMono.variable} antialiased`}
+        className={`${manrope.variable} ${inter.variable} ${plexMono.variable} antialiased`}
       >
         {children}
       </body>

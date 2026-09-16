@@ -2,24 +2,28 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { nav, specialities, contact } from "@/lib/content";
+import Image from "next/image";
+import { nav, specialities, serviceDetails, contact, cta } from "@/lib/content";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [servicesOpenMobile, setServicesOpenMobile] = useState(false);
   const [specialityOpenMobile, setSpecialityOpenMobile] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--color-line)] bg-[var(--color-bg)]/95 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-[var(--color-line)] bg-white/95 backdrop-blur">
       {/* Top bar — logo left, contact info right on desktop, hamburger right on mobile */}
       <div className="border-b border-[var(--color-line)]">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-2.5">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-md bg-[var(--color-navy)] font-mono text-sm font-medium text-white">
-              AX
-            </span>
-            <span className="font-[family-name:var(--font-display)] text-lg font-semibold tracking-tight text-[var(--color-navy)]">
-              AspireMedX
-            </span>
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/brand/logo-navbar.png"
+              alt="AspireMedX — Smart Revenue Cycle Solutions"
+              width={930}
+              height={414}
+              priority
+              className="h-9 w-auto sm:h-10"
+            />
           </Link>
 
           <div className="hidden items-center gap-6 md:flex">
@@ -37,7 +41,7 @@ export default function Navbar() {
               <MailIcon />
               {contact.email}
             </a>
-            <span className="flex items-center gap-1.5 rounded-md bg-[var(--color-teal-light)] px-2.5 py-1.5 text-xs font-semibold text-[var(--color-teal)]">
+            <span className="flex items-center gap-1.5 rounded-md bg-[var(--color-teal-tint)] px-2.5 py-1.5 text-xs font-semibold text-[var(--color-teal)]">
               <ShieldIcon />
               HIPAA Compliant
             </span>
@@ -62,12 +66,34 @@ export default function Navbar() {
       {/* Main nav row — desktop only, mobile uses the dropdown menu below */}
       <div className="mx-auto hidden max-w-6xl items-center justify-between px-6 py-2.5 md:flex">
         <nav className="flex items-center gap-8">
-          <Link
-            href="/#services"
-            className="text-sm font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-navy)]"
-          >
-            Services
-          </Link>
+          {/* Services — link + hover dropdown */}
+          <div className="group relative">
+            <Link
+              href="/services"
+              className="flex items-center gap-1 text-sm font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-navy)]"
+            >
+              Services
+              <ChevronIcon />
+            </Link>
+
+            <div className="invisible absolute left-0 top-full z-50 w-64 translate-y-1 rounded-xl border border-[var(--color-line)] bg-white p-2 opacity-0 shadow-[0_20px_45px_-20px_rgba(11,31,51,0.35)] transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+              {serviceDetails.map((service) => (
+                <Link
+                  key={service.slug}
+                  href={`/services/${service.slug}`}
+                  className="block rounded-lg px-3 py-2.5 text-sm text-[var(--color-ink)] hover:bg-[var(--color-bg)] hover:text-[var(--color-navy)]"
+                >
+                  {service.title}
+                </Link>
+              ))}
+              <Link
+                href="/services"
+                className="mt-1 block rounded-lg border-t border-[var(--color-line)] px-3 pt-3 text-sm font-semibold text-[var(--color-teal)] hover:text-[var(--color-navy)]"
+              >
+                View all services →
+              </Link>
+            </div>
+          </div>
 
           {/* Speciality — link + hover dropdown */}
           <div className="group relative">
@@ -79,12 +105,12 @@ export default function Navbar() {
               <ChevronIcon />
             </Link>
 
-            <div className="invisible absolute left-0 top-full z-50 w-72 translate-y-1 rounded-lg border border-[var(--color-line)] bg-white p-2 opacity-0 shadow-[0_20px_45px_-20px_rgba(11,61,92,0.35)] transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+            <div className="invisible absolute left-0 top-full z-50 w-72 translate-y-1 rounded-md border border-[var(--color-line)] bg-white p-2 opacity-0 shadow-[0_20px_45px_-20px_rgba(11,31,51,0.35)] transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
               {specialities.map((item) => (
                 <Link
                   key={item.slug}
                   href={`/speciality/${item.slug}`}
-                  className="block rounded-md px-3 py-2 text-sm text-[var(--color-ink)] hover:bg-[var(--color-bg-alt)] hover:text-[var(--color-navy)]"
+                  className="block rounded-md px-3 py-2 text-sm text-[var(--color-ink)] hover:bg-[var(--color-bg)] hover:text-[var(--color-navy)]"
                 >
                   {item.title}
                 </Link>
@@ -99,7 +125,7 @@ export default function Navbar() {
           </div>
 
           {nav
-            .filter((item) => item.label !== "Services")
+            .filter((item) => item.label !== "Services" && item.label !== "Speciality")
             .map((item) => (
               <a
                 key={item.href}
@@ -113,18 +139,40 @@ export default function Navbar() {
 
         <Link
           href="/#contact"
-          className="rounded-md bg-[var(--color-navy)] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[var(--color-navy-dark)]"
+          className="rounded-md bg-[var(--color-navy)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-navy-soft)]"
         >
-          Request a Demo
+          {cta.secondary}
         </Link>
       </div>
 
       {/* Mobile menu */}
       {open && (
         <nav className="flex flex-col gap-1 border-t border-[var(--color-line)] px-6 py-4 md:hidden">
-          <Link href="/#services" onClick={() => setOpen(false)} className="py-2 text-sm font-medium text-[var(--color-muted)]">
-            Services
-          </Link>
+          {/* Services mobile accordion */}
+          <button
+            onClick={() => setServicesOpenMobile((v) => !v)}
+            className="flex items-center justify-between py-2 text-left text-sm font-medium text-[var(--color-muted)]"
+            aria-expanded={servicesOpenMobile}
+          >
+            <Link href="/services" onClick={(e) => e.stopPropagation()} className="hover:text-[var(--color-navy)]">
+              Services
+            </Link>
+            <ChevronIcon />
+          </button>
+          {servicesOpenMobile && (
+            <div className="ml-3 flex flex-col gap-1 border-l border-[var(--color-line)] pl-3">
+              {serviceDetails.map((service) => (
+                <Link
+                  key={service.slug}
+                  href={`/services/${service.slug}`}
+                  onClick={() => setOpen(false)}
+                  className="py-1.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-navy)]"
+                >
+                  {service.title}
+                </Link>
+              ))}
+            </div>
+          )}
 
           <button
             onClick={() => setSpecialityOpenMobile((v) => !v)}
@@ -152,7 +200,7 @@ export default function Navbar() {
           )}
 
           {nav
-            .filter((item) => item.label !== "Services")
+            .filter((item) => item.label !== "Services" && item.label !== "Speciality")
             .map((item) => (
               <a
                 key={item.href}
@@ -179,9 +227,9 @@ export default function Navbar() {
           <Link
             href="/#contact"
             onClick={() => setOpen(false)}
-            className="mt-2 rounded-md bg-[var(--color-navy)] px-4 py-2 text-center text-sm font-medium text-white"
+            className="mt-2 rounded-md bg-[var(--color-navy)] px-4 py-2 text-center text-sm font-semibold text-white"
           >
-            Request a Demo
+            {cta.secondary}
           </Link>
         </nav>
       )}

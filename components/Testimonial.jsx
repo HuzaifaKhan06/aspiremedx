@@ -1,18 +1,30 @@
 import { testimonial } from "@/lib/content";
+import Reveal from "./Reveal";
 
 export default function Testimonial() {
   return (
-    <section className="bg-[var(--color-bg-alt)] py-20">
-      <div className="mx-auto max-w-3xl px-6 text-center">
-        <p className="font-[family-name:var(--font-display)] text-2xl italic leading-snug text-[var(--color-navy)] sm:text-3xl">
-          “{testimonial.quote}”
-        </p>
-        <p className="mt-6 font-mono text-xs uppercase tracking-wider text-[var(--color-muted)]">
-          {testimonial.attribution}
-        </p>
-        <p className="mt-8 text-xs text-[var(--color-muted)]/70">
-          {testimonial.note}
-        </p>
+    <section className="bg-[var(--color-navy)] py-24">
+      <div className="mx-auto max-w-4xl px-6">
+        <Reveal className="text-center">
+          {/* Decorative quote mark */}
+          <div
+            className="mb-4 font-serif text-8xl leading-none text-[var(--color-cyan)] opacity-30 select-none"
+            aria-hidden
+          >
+            &ldquo;
+          </div>
+
+          <blockquote className="font-[family-name:var(--font-display)] text-xl font-semibold leading-relaxed text-white sm:text-2xl">
+            {testimonial.quote}
+          </blockquote>
+
+          <div className="mt-8">
+            <div className="mx-auto mb-5 h-px w-16 bg-[var(--color-cyan)]/30" />
+            <p className="font-mono text-xs font-semibold uppercase tracking-widest text-white/40">
+              {testimonial.attribution}
+            </p>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

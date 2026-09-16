@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SpecialityCard from "@/components/SpecialityCard";
-import { specialities, contact } from "@/lib/content";
+import { specialities, contact, cta } from "@/lib/content";
 
 export function generateStaticParams() {
   return specialities
@@ -11,8 +11,9 @@ export function generateStaticParams() {
     .map((item) => ({ slug: item.slug }));
 }
 
-export function generateMetadata({ params }) {
-  const speciality = specialities.find((item) => item.slug === params.slug);
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const speciality = specialities.find((item) => item.slug === slug);
   if (!speciality) return {};
   return {
     title: `${speciality.title} | AspireMedX`,
@@ -20,8 +21,9 @@ export function generateMetadata({ params }) {
   };
 }
 
-export default function SpecialityDetailPage({ params }) {
-  const speciality = specialities.find((item) => item.slug === params.slug);
+export default async function SpecialityDetailPage({ params }) {
+  const { slug } = await params;
+  const speciality = specialities.find((item) => item.slug === slug);
   if (!speciality) notFound();
 
   const otherSpecialities = specialities.filter((item) => item.slug !== speciality.slug).slice(0, 3);
@@ -32,10 +34,10 @@ export default function SpecialityDetailPage({ params }) {
       <main className="bg-[var(--color-bg)]">
         <section className="border-b border-[var(--color-line)] bg-white py-16">
           <div className="mx-auto max-w-4xl px-6">
-            <Link href="/speciality" className="text-sm font-medium text-[var(--color-teal)] hover:text-[var(--color-navy)]">
+            <Link href="/speciality" className="text-sm font-semibold text-[var(--color-teal)] hover:text-[var(--color-navy)]">
               ← All specialities
             </Link>
-            <h1 className="mt-4 font-[family-name:var(--font-display)] text-4xl font-semibold tracking-tight text-[var(--color-navy)] sm:text-5xl">
+            <h1 className="mt-4 font-[family-name:var(--font-display)] text-4xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-5xl">
               {speciality.title}
             </h1>
             <p className="mt-4 max-w-2xl text-lg text-[var(--color-muted)]">
@@ -47,14 +49,14 @@ export default function SpecialityDetailPage({ params }) {
         <section className="py-16">
           <div className="mx-auto grid max-w-4xl gap-12 px-6 md:grid-cols-[1.4fr_1fr]">
             <div>
-              <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--color-navy)]">
+              <h2 className="font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--color-navy)]">
                 Overview
               </h2>
               <p className="mt-4 leading-relaxed text-[var(--color-muted)]">
                 {speciality.overview}
               </p>
 
-              <h2 className="mt-10 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--color-navy)]">
+              <h2 className="mt-10 font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--color-navy)]">
                 Where claims usually go wrong
               </h2>
               <p className="mt-4 leading-relaxed text-[var(--color-muted)]">
@@ -62,7 +64,7 @@ export default function SpecialityDetailPage({ params }) {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-[var(--color-line)] bg-white p-6">
+            <div className="rounded-lg border border-[var(--color-line)] bg-white p-6">
               <h3 className="font-mono text-xs uppercase tracking-wider text-[var(--color-teal)]">
                 What we handle
               </h3>
@@ -81,23 +83,23 @@ export default function SpecialityDetailPage({ params }) {
         <section className="border-y border-[var(--color-line)] bg-[var(--color-navy)] py-16">
           <div className="mx-auto flex max-w-4xl flex-col items-start justify-between gap-6 px-6 sm:flex-row sm:items-center">
             <div>
-              <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-white">
+              <h2 className="font-[family-name:var(--font-display)] text-2xl font-bold text-white">
                 Talk to us about {speciality.title.toLowerCase()}
               </h2>
               <p className="mt-2 text-sm text-white/70">{contact.email} · {contact.phone}</p>
             </div>
             <Link
               href="/#contact"
-              className="shrink-0 rounded-md bg-[var(--color-amber)] px-6 py-3 text-sm font-semibold text-[var(--color-navy-dark)] hover:bg-[var(--color-amber-dark)]"
+              className="shrink-0 rounded-md bg-[var(--color-cyan)] px-6 py-3 text-sm font-semibold text-[var(--color-navy)] hover:brightness-95"
             >
-              Request a Consultation
+              {cta.secondary}
             </Link>
           </div>
         </section>
 
         <section className="py-16">
           <div className="mx-auto max-w-4xl px-6">
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--color-navy)]">
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-bold text-[var(--color-navy)]">
               Other specialities
             </h2>
             <div className="mt-6 grid gap-6 sm:grid-cols-3">

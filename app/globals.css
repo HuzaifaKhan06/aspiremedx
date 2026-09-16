@@ -1,33 +1,32 @@
 @import "tailwindcss";
 
 :root {
-  --color-navy: #0b3d5c;
-  --color-navy-dark: #082a40;
-  --color-teal: #1f6f63;
-  --color-teal-light: #e7f0ee;
-  --color-amber: #e2a63b;
-  --color-amber-dark: #c98f27;
-  --color-ink: #17212b;
-  --color-muted: #55636f;
-  --color-bg: #f7f9fa;
-  --color-bg-alt: #eff3f4;
-  --color-line: #e1e7ea;
+  /* Brand palette */
+  --color-navy: #0b1f33;       /* Deep Navy — primary brand */
+  --color-navy-soft: #173b57;  /* Secondary Navy */
+  --color-teal: #0b8f87;       /* Professional Teal — accent */
+  --color-cyan: #20c4d6;       /* Accent Cyan — highlights, data */
+  --color-teal-tint: #e5f3f2;  /* Light teal tint for panels */
+  --color-bg: #f3f8fa;         /* Light Background */
+  --color-white: #ffffff;
+  --color-ink: #17232d;        /* Main Text */
+  --color-muted: #64748b;      /* Secondary Text */
+  --color-line: #e1e8ec;       /* Hairline borders */
 }
 
 @theme inline {
   --color-navy: var(--color-navy);
-  --color-navy-dark: var(--color-navy-dark);
+  --color-navy-soft: var(--color-navy-soft);
   --color-teal: var(--color-teal);
-  --color-teal-light: var(--color-teal-light);
-  --color-amber: var(--color-amber);
-  --color-amber-dark: var(--color-amber-dark);
+  --color-cyan: var(--color-cyan);
+  --color-teal-tint: var(--color-teal-tint);
+  --color-bg: var(--color-bg);
+  --color-white: var(--color-white);
   --color-ink: var(--color-ink);
   --color-muted: var(--color-muted);
-  --color-bg: var(--color-bg);
-  --color-bg-alt: var(--color-bg-alt);
   --color-line: var(--color-line);
 
-  --font-display: var(--font-fraunces);
+  --font-display: var(--font-manrope);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-plex-mono);
 }
@@ -51,17 +50,11 @@ body {
   }
 }
 
-/* Revenue cycle loop — orbiting marker, paused for reduced-motion users above */
-@keyframes orbit {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Slow, understated pulse used sparingly on live/data indicators */
+@keyframes soft-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
-
-.orbit-spin {
-  animation: orbit 18s linear infinite;
-  transform-origin: center;
+.pulse-dot {
+  animation: soft-pulse 2.4s ease-in-out infinite;
 }

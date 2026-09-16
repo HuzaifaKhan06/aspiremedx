@@ -18,7 +18,7 @@ export default function SpecialityPage() {
           <p className="font-mono text-xs uppercase tracking-wider text-[var(--color-teal)]">
             Speciality billing
           </p>
-          <h1 className="mt-3 max-w-2xl font-[family-name:var(--font-display)] text-4xl font-semibold tracking-tight text-[var(--color-navy)] sm:text-5xl">
+          <h1 className="mt-3 max-w-2xl font-[family-name:var(--font-display)] text-4xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-5xl">
             Billing rules change by speciality. So does our approach.
           </h1>
           <p className="mt-4 max-w-xl text-[var(--color-muted)]">

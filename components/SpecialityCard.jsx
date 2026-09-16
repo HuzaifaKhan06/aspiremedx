@@ -4,10 +4,10 @@ export default function SpecialityCard({ speciality }) {
   return (
     <Link
       href={`/speciality/${speciality.slug}`}
-      className="group flex flex-col justify-between rounded-2xl border border-[var(--color-line)] bg-white p-8 transition-colors hover:border-[var(--color-teal)] hover:bg-[var(--color-bg-alt)]"
+      className="group flex flex-col justify-between rounded-lg border border-[var(--color-line)] bg-white p-8 transition-colors hover:border-[var(--color-teal)] hover:bg-[var(--color-bg)]"
     >
       <div>
-        <h3 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--color-navy)]">
+        <h3 className="font-[family-name:var(--font-display)] text-xl font-bold text-[var(--color-navy)]">
           {speciality.title}
         </h3>
         <p className="mt-3 text-sm leading-relaxed text-[var(--color-muted)]">

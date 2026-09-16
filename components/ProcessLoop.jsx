@@ -1,91 +1,66 @@
-import { processSteps } from "@/lib/content";
-
-// Five points evenly spaced around a circle (r=120, center 160,160),
-// starting at the top — one point per stage of the revenue cycle.
-const NODE_POSITIONS = [
-  { x: 160, y: 40 },
-  { x: 274, y: 123 },
-  { x: 231, y: 257 },
-  { x: 89, y: 257 },
-  { x: 46, y: 123 },
-];
+import { processSteps, processIntro } from "@/lib/content";
+import Reveal from "./Reveal";
 
 export default function ProcessLoop() {
   return (
-    <section id="process" className="bg-white py-24">
+    <section id="process" className="bg-[var(--color-bg)] py-24">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="max-w-xl">
-          <p className="font-mono text-xs uppercase tracking-wider text-[var(--color-teal)]">
-            The cycle
+        <Reveal className="max-w-2xl">
+          <p className="font-mono text-xs font-semibold uppercase tracking-wider text-[var(--color-teal)]">
+            Our Proven Process
           </p>
-          <h2 className="mt-3 font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-navy)] sm:text-4xl">
-            One claim, five checkpoints, no gaps.
+          <h2 className="mt-3 font-[family-name:var(--font-display)] text-3xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-4xl">
+            From assessment to optimization — a structured path.
           </h2>
-          <p className="mt-4 text-[var(--color-muted)]">
-            Every claim moves through the same cycle — a claim only leaves a
-            stage once it&apos;s actually ready for the next one.
-          </p>
+          <p className="mt-4 text-[var(--color-muted)]">{processIntro}</p>
+        </Reveal>
+
+        {/* Desktop: horizontal timeline */}
+        <div className="mt-14 hidden lg:block">
+          <div className="relative flex items-start">
+            {/* Connecting line */}
+            <div className="absolute left-[3.5rem] right-[3.5rem] top-7 h-px bg-[var(--color-line)]" />
+
+            {processSteps.map((step, i) => (
+              <Reveal key={step.code} delay={i * 80} className="relative flex flex-1 flex-col items-center px-3 text-center">
+                {/* Step number circle */}
+                <div className="relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-[var(--color-navy)] bg-white font-[family-name:var(--font-display)] text-base font-extrabold text-[var(--color-navy)]">
+                  {parseInt(step.code)}
+                  {i === 0 && (
+                    <span className="pulse-dot absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-[var(--color-cyan)]" />
+                  )}
+                </div>
+                <div className="mt-4">
+                  <p className="font-[family-name:var(--font-display)] text-sm font-bold text-[var(--color-navy)]">
+                    {step.title}
+                  </p>
+                  <p className="mt-2 text-xs leading-relaxed text-[var(--color-muted)]">
+                    {step.description}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
 
-        <div className="mt-14 grid items-center gap-12 md:grid-cols-[320px_1fr]">
-          <div className="relative mx-auto h-80 w-80 shrink-0">
-            <svg viewBox="0 0 320 320" className="h-full w-full">
-              <circle
-                cx="160"
-                cy="160"
-                r="120"
-                fill="none"
-                stroke="var(--color-line)"
-                strokeWidth="2"
-                strokeDasharray="2 8"
-              />
-              {/* orbiting marker — paused automatically for reduced-motion users via globals.css */}
-              <g className="orbit-spin" style={{ transformOrigin: "160px 160px" }}>
-                <circle cx="160" cy="40" r="5" fill="var(--color-amber)" />
-              </g>
-
-              {processSteps.map((step, i) => {
-                const pos = NODE_POSITIONS[i];
-                return (
-                  <g key={step.code}>
-                    <circle
-                      cx={pos.x}
-                      cy={pos.y}
-                      r="22"
-                      fill="var(--color-bg)"
-                      stroke="var(--color-navy)"
-                      strokeWidth="1.5"
-                    />
-                    <text
-                      x={pos.x}
-                      y={pos.y + 5}
-                      textAnchor="middle"
-                      className="font-mono"
-                      fontSize="12"
-                      fill="var(--color-navy)"
-                    >
-                      {step.code}
-                    </text>
-                  </g>
-                );
-              })}
-            </svg>
-          </div>
-
-          <ol className="grid gap-6 sm:grid-cols-2">
-            {processSteps.map((step) => (
-              <li key={step.code} className="border-l-2 border-[var(--color-teal)] pl-4">
-                <p className="font-mono text-xs text-[var(--color-teal)]">{step.code}</p>
-                <p className="mt-1 font-[family-name:var(--font-display)] font-semibold text-[var(--color-navy)]">
+        {/* Mobile / tablet: vertical numbered steps */}
+        <ol className="mt-10 space-y-5 lg:hidden">
+          {processSteps.map((step, i) => (
+            <Reveal as="li" key={step.code} delay={i * 60} className="flex gap-5">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-[var(--color-navy)] bg-white font-[family-name:var(--font-display)] text-sm font-extrabold text-[var(--color-navy)]">
+                {parseInt(step.code)}
+              </div>
+              <div className="flex-1 pb-5 last:pb-0">
+                <p className="font-[family-name:var(--font-display)] font-bold text-[var(--color-navy)]">
                   {step.title}
                 </p>
-                <p className="mt-1 text-sm leading-relaxed text-[var(--color-muted)]">
+                <p className="mt-1.5 text-sm leading-relaxed text-[var(--color-muted)]">
                   {step.description}
                 </p>
-              </li>
-            ))}
-          </ol>
-        </div>
+              </div>
+            </Reveal>
+          ))}
+        </ol>
       </div>
     </section>
   );

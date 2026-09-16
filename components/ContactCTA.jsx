@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { contact, cta } from "@/lib/content";
 
 export default function ContactCTA() {
@@ -14,6 +15,41 @@ export default function ContactCTA() {
 
   return (
     <section id="contact" className="bg-[var(--color-bg)] py-24">
+      {/* CTA banner → dedicated Contact page */}
+      <div className="mx-auto mb-10 max-w-6xl px-6 sm:px-0">
+        <div
+          className="relative flex flex-col items-center justify-between gap-6 overflow-hidden rounded-2xl px-8 py-8 text-center sm:flex-row sm:text-left"
+          style={{ background: "linear-gradient(135deg, #0b1f33 0%, #173b57 60%, #0b2a22 100%)" }}
+        >
+          {/* Hex overlay */}
+          <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.05]" aria-hidden xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="cta-banner-hex" x="0" y="0" width="40" height="35" patternUnits="userSpaceOnUse">
+                <polygon points="20,2 37,11 37,29 20,38 3,29 3,11" fill="none" stroke="#20c4d6" strokeWidth="0.7" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#cta-banner-hex)" />
+          </svg>
+          <div className="pointer-events-none absolute right-0 top-0 h-full w-1/3 opacity-10"
+            style={{ background: "radial-gradient(ellipse at top right, #20c4d6, transparent 70%)" }} aria-hidden />
+          <div className="relative">
+            <p className="font-[family-name:var(--font-display)] text-xl font-extrabold text-white sm:text-2xl">
+              Ready for a full consultation?
+            </p>
+            <p className="mt-1 text-sm text-white/50">
+              Visit our dedicated contact page for a detailed enquiry form — tell us your specialty, practice size, and biggest billing challenges.
+            </p>
+          </div>
+          <Link
+            href="/contact"
+            className="relative shrink-0 rounded-xl px-7 py-3.5 text-sm font-bold text-white shadow-[0_4px_24px_-4px_rgba(32,196,214,0.5)] transition-all hover:brightness-110"
+            style={{ background: "linear-gradient(135deg, #0b8f87, #20c4d6)" }}
+          >
+            Open Contact Form →
+          </Link>
+        </div>
+      </div>
+
       <div className="mx-auto max-w-6xl overflow-hidden rounded-2xl border border-[var(--color-line)] shadow-[0_24px_80px_-32px_rgba(11,31,51,0.2)] md:flex">
         {/* Left: Navy info panel */}
         <div className="bg-[var(--color-navy)] p-10 md:w-[42%] md:p-12">

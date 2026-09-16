@@ -66,6 +66,12 @@ export default function Navbar() {
       {/* Main nav row — desktop only, mobile uses the dropdown menu below */}
       <div className="mx-auto hidden max-w-6xl items-center justify-between px-6 py-2.5 md:flex">
         <nav className="flex items-center gap-8">
+          <Link
+            href="/"
+            className="text-sm font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-navy)]"
+          >
+            Home
+          </Link>
           {/* Services — link + hover dropdown */}
           <div className="group relative">
             <Link
@@ -148,6 +154,13 @@ export default function Navbar() {
       {/* Mobile menu */}
       {open && (
         <nav className="flex flex-col gap-1 border-t border-[var(--color-line)] px-6 py-4 md:hidden">
+          <Link
+            href="/"
+            onClick={() => setOpen(false)}
+            className="py-2 text-sm font-medium text-[var(--color-muted)]"
+          >
+            Home
+          </Link>
           {/* Services mobile accordion */}
           <button
             onClick={() => setServicesOpenMobile((v) => !v)}

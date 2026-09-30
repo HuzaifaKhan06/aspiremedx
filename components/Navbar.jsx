@@ -12,63 +12,23 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--color-line)] bg-white/95 backdrop-blur">
-      {/* Top bar — logo left, contact info right on desktop, hamburger right on mobile */}
-      <div className="border-b border-[var(--color-line)]">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-2.5">
-          <Link href="/" className="flex items-center">
-            <Image
-              src="/brand/logo-navbar.png"
-              alt="AspireMedX — Smart Revenue Cycle Solutions"
-              width={930}
-              height={414}
-              priority
-              className="h-9 w-auto sm:h-10"
-            />
-          </Link>
+      {/* Single row — logo, nav links, CTA on desktop; logo + hamburger on mobile */}
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-3 lg:gap-4">
+        <Link href="/" className="flex shrink-0 items-center">
+          <Image
+            src="/brand/logo-navbar.png"
+            alt="AspireMedX — Smart Revenue Cycle Solutions"
+            width={930}
+            height={414}
+            priority
+            className="h-11 w-auto sm:h-12"
+          />
+        </Link>
 
-          <div className="hidden items-center gap-6 md:flex">
-            <a
-              href={`tel:${contact.phone.replace(/[^+\d]/g, "")}`}
-              className="flex items-center gap-2 text-sm font-medium text-[var(--color-navy)] hover:text-[var(--color-teal)]"
-            >
-              <PhoneIcon />
-              {contact.phone}
-            </a>
-            <a
-              href={`mailto:${contact.email}`}
-              className="flex items-center gap-2 text-sm font-medium text-[var(--color-navy)] hover:text-[var(--color-teal)]"
-            >
-              <MailIcon />
-              {contact.email}
-            </a>
-            <span className="flex items-center gap-1.5 rounded-md bg-[var(--color-teal-tint)] px-2.5 py-1.5 text-xs font-semibold text-[var(--color-teal)]">
-              <ShieldIcon />
-              HIPAA Compliant
-            </span>
-          </div>
-
-          {/* Hamburger — same row as the logo, right corner, mobile only */}
-          <button
-            onClick={() => setOpen((v) => !v)}
-            aria-label="Toggle menu"
-            aria-expanded={open}
-            className="flex h-9 w-9 items-center justify-center rounded-md border border-[var(--color-line)] md:hidden"
-          >
-            <span className="sr-only">Menu</span>
-            <div className="space-y-1.5">
-              <span className="block h-0.5 w-5 bg-[var(--color-ink)]" />
-              <span className="block h-0.5 w-5 bg-[var(--color-ink)]" />
-            </div>
-          </button>
-        </div>
-      </div>
-
-      {/* Main nav row — desktop only, mobile uses the dropdown menu below */}
-      <div className="mx-auto hidden max-w-6xl items-center justify-between px-6 py-2.5 md:flex">
-        <nav className="flex items-center gap-8">
+        <nav className="hidden shrink-0 items-center gap-4 whitespace-nowrap lg:flex">
           <Link
             href="/"
-            className="text-sm font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-navy)]"
+            className="text-[13px] font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-navy)]"
           >
             Home
           </Link>
@@ -76,7 +36,7 @@ export default function Navbar() {
           <div className="group relative">
             <Link
               href="/services"
-              className="flex items-center gap-1 text-sm font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-navy)]"
+              className="flex items-center gap-1 text-[13px] font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-navy)]"
             >
               Services
               <ChevronIcon />
@@ -105,7 +65,7 @@ export default function Navbar() {
           <div className="group relative">
             <Link
               href="/speciality"
-              className="flex items-center gap-1 text-sm font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-navy)]"
+              className="flex items-center gap-1 text-[13px] font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-navy)]"
             >
               Speciality
               <ChevronIcon />
@@ -136,24 +96,85 @@ export default function Navbar() {
               <a
                 key={item.href}
                 href={item.href}
-                className="text-sm font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-navy)]"
+                className="text-[13px] font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-navy)]"
               >
                 {item.label}
               </a>
             ))}
         </nav>
 
+        {/* Contact + HIPAA — icon chips on smaller desktops, full details on wide screens */}
+        <div className="hidden shrink-0 items-center gap-2 lg:flex xl:gap-3">
+          <div className="flex items-center gap-2 xl:hidden">
+            <a
+              href={`tel:${contact.phone.replace(/[^+\d]/g, "")}`}
+              aria-label={`Call ${contact.phone}`}
+              title={contact.phone}
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--color-line)] text-[var(--color-navy)] transition-colors hover:border-[var(--color-teal)] hover:text-[var(--color-teal)]"
+            >
+              <PhoneIcon />
+            </a>
+            <a
+              href={`mailto:${contact.email}`}
+              aria-label={`Email ${contact.email}`}
+              title={contact.email}
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--color-line)] text-[var(--color-navy)] transition-colors hover:border-[var(--color-teal)] hover:text-[var(--color-teal)]"
+            >
+              <MailIcon />
+            </a>
+          </div>
+
+          <div className="hidden flex-col gap-0.5 border-l border-[var(--color-line)] pl-3 xl:flex">
+            <a
+              href={`tel:${contact.phone.replace(/[^+\d]/g, "")}`}
+              className="flex items-center gap-1.5 text-xs font-medium text-[var(--color-navy)] hover:text-[var(--color-teal)]"
+            >
+              <PhoneIcon size={13} />
+              {contact.phone}
+            </a>
+            <a
+              href={`mailto:${contact.email}`}
+              className="flex items-center gap-1.5 text-xs font-medium text-[var(--color-navy)] hover:text-[var(--color-teal)]"
+            >
+              <MailIcon size={13} />
+              {contact.email}
+            </a>
+          </div>
+
+          <span
+            title="HIPAA Compliant"
+            className="flex items-center gap-1.5 rounded-md bg-[var(--color-teal-tint)] px-2 py-1.5 text-xs font-semibold text-[var(--color-teal)]"
+          >
+            <ShieldIcon />
+            <span className="leading-none">HIPAA<span className="hidden xl:inline"> Compliant</span></span>
+          </span>
+        </div>
+
         <Link
           href="/#contact"
-          className="rounded-md bg-[var(--color-navy)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-navy-soft)]"
+          className="hidden shrink-0 rounded-md bg-[var(--color-navy)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-navy-soft)] lg:block"
         >
           {cta.secondary}
         </Link>
+
+        {/* Hamburger — same row as the logo, right corner, below desktop width */}
+        <button
+          onClick={() => setOpen((v) => !v)}
+          aria-label="Toggle menu"
+          aria-expanded={open}
+          className="flex h-9 w-9 items-center justify-center rounded-md border border-[var(--color-line)] lg:hidden"
+        >
+          <span className="sr-only">Menu</span>
+          <div className="space-y-1.5">
+            <span className="block h-0.5 w-5 bg-[var(--color-ink)]" />
+            <span className="block h-0.5 w-5 bg-[var(--color-ink)]" />
+          </div>
+        </button>
       </div>
 
       {/* Mobile menu */}
       {open && (
-        <nav className="flex flex-col gap-1 border-t border-[var(--color-line)] px-6 py-4 md:hidden">
+        <nav className="flex flex-col gap-1 border-t border-[var(--color-line)] px-6 py-4 lg:hidden">
           <Link
             href="/"
             onClick={() => setOpen(false)}
@@ -250,17 +271,17 @@ export default function Navbar() {
   );
 }
 
-function PhoneIcon() {
+function PhoneIcon({ size = 16 }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
     </svg>
   );
 }
 
-function MailIcon() {
+function MailIcon({ size = 16 }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <rect x="2" y="4" width="20" height="16" rx="2" />
       <path d="m22 6-10 7L2 6" />
     </svg>

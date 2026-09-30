@@ -58,3 +58,49 @@ body {
 .pulse-dot {
   animation: soft-pulse 2.4s ease-in-out infinite;
 }
+
+/* ── Chatbot ── */
+/* Launcher: rests, then zooms in and wiggles every few seconds */
+@keyframes chat-attention {
+  0%, 68%, 100% { transform: scale(1) rotate(0deg); }
+  72% { transform: scale(1.14) rotate(-12deg); }
+  76% { transform: scale(1.14) rotate(10deg); }
+  80% { transform: scale(1.12) rotate(-8deg); }
+  84% { transform: scale(1.1) rotate(6deg); }
+  88% { transform: scale(1.06) rotate(-3deg); }
+  92% { transform: scale(1) rotate(0deg); }
+}
+.chat-attention {
+  animation: chat-attention 4.5s ease-in-out infinite;
+}
+@keyframes chat-ring {
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(1.75); opacity: 0; }
+}
+.chat-ring {
+  animation: chat-ring 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes chat-panel-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.chat-panel-in {
+  animation: chat-panel-in 0.22s ease-out both;
+  transform-origin: bottom right;
+}
+@keyframes chat-msg-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.chat-msg-in {
+  animation: chat-msg-in 0.25s ease-out both;
+}
+@keyframes chat-typing {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+.chat-typing span {
+  animation: chat-typing 1.2s ease-in-out infinite;
+}
+.chat-typing span:nth-child(2) { animation-delay: 0.15s; }
+.chat-typing span:nth-child(3) { animation-delay: 0.3s; }

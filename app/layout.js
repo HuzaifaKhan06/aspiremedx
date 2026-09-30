@@ -1,5 +1,6 @@
 import { Manrope, Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
+import ChatWidget from "@/components/chatbot/ChatWidget";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
         className={`${manrope.variable} ${inter.variable} ${plexMono.variable} antialiased`}
       >
         {children}
+        <ChatWidget />
       </body>
     </html>
   );

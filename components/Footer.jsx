@@ -8,6 +8,7 @@ const companyLinks = [
   { label: "Why Choose Us", href: "/#why-us" },
   { label: "Services", href: "/services" },
   { label: "Specialities", href: "/speciality" },
+  { label: "Pricing", href: "/pricing" },
   { label: "Technology", href: "/#technology" },
   { label: "Contact", href: "/contact" },
 ];

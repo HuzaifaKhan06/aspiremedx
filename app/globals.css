@@ -29,6 +29,21 @@
   --font-display: var(--font-manrope);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-plex-mono);
+
+  /* Breakpoints pinned in px so the smaller root size below doesn't shift
+     where layouts switch (Tailwind's defaults are rem-based). */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}
+
+/* Site-wide scale: every rem-based size (type, spacing, cards) is ~6% more
+   compact than the 16px browser default, for a tighter, more professional
+   density. */
+html {
+  font-size: 15px;
 }
 
 * {
@@ -104,3 +119,284 @@ body {
 }
 .chat-typing span:nth-child(2) { animation-delay: 0.15s; }
 .chat-typing span:nth-child(3) { animation-delay: 0.3s; }
+
+/* ---------------------------------------------------------------------------
+   Page transition overlay (components/PageTransition.jsx)
+   Frosted transparent blur + bouncy cartoon wordmark.
+--------------------------------------------------------------------------- */
+.amx-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(243, 248, 250, 0.38);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+  animation: amx-fade-in 0.22s ease-out both;
+}
+.amx-overlay.amx-out {
+  animation: amx-fade-out 0.55s ease-in forwards;
+}
+.amx-out .amx-stage {
+  animation: amx-stage-out 0.55s cubic-bezier(0.6, -0.4, 0.7, 0) forwards;
+}
+
+.amx-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Word + splat + sparks share one box so they stay centred together */
+.amx-mark {
+  position: relative;
+  padding: 0 1.5rem;
+}
+
+/* Morphing "splat" behind the word */
+.amx-blob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(430px, 92vw);
+  height: 150px;
+  translate: -50% -50%;
+  background: linear-gradient(160deg, #ffffff 0%, #f1f8fb 100%);
+  border-radius: 42% 58% 63% 37% / 45% 40% 60% 55%;
+  box-shadow: 0 24px 50px -18px rgba(30, 58, 138, 0.45), inset 0 0 0 2px rgba(32, 196, 214, 0.25);
+  animation:
+    amx-blob-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+    amx-blob-morph 2.6s ease-in-out 0.55s infinite;
+}
+.amx-blob-shadow {
+  background: linear-gradient(135deg, #1e3a8a 0%, #14b39a 70%, #3ccf6e 100%);
+  box-shadow: none;
+  translate: -47% -44%;
+  rotate: -4deg;
+  animation-delay: 0.06s, 0.8s;
+}
+
+/* Letters */
+.amx-word {
+  position: relative;
+  display: flex;
+  margin: 0;
+  font-family: var(--font-fun), "Montserrat", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.1rem, 8vw, 3.6rem);
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.amx-l {
+  display: inline-block;
+  text-shadow: 0 3px 0 rgba(30, 58, 138, 0.18), 0 8px 18px rgba(30, 58, 138, 0.18);
+  transform-origin: 50% 100%;
+  animation:
+    amx-drop 0.7s cubic-bezier(0.3, 1.5, 0.5, 1) both,
+    amx-bob 1.2s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 55ms), calc(0.8s + var(--i) * 70ms);
+}
+.amx-l.amx-med {
+  text-shadow: 0 3px 0 rgba(13, 148, 136, 0.18), 0 8px 18px rgba(13, 148, 136, 0.18);
+}
+.amx-l.amx-x {
+  margin-left: 0.02em;
+  text-shadow: 0 3px 0 rgba(34, 197, 94, 0.2), 0 8px 18px rgba(34, 197, 94, 0.2);
+  animation-name: amx-spin-in, amx-bob;
+  animation-duration: 0.8s, 1.2s;
+}
+
+/* Logo's rising arrow, drawn across the top of the word */
+.amx-arrow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(250px, 60vw);
+  height: auto;
+  translate: -36% -122%;
+  overflow: visible;
+  pointer-events: none;
+}
+.amx-arrow-line {
+  fill: none;
+  stroke: url(#amx-arrow-grad);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 240;
+  stroke-dashoffset: 240;
+  animation: amx-draw 0.7s ease-out 0.5s forwards;
+}
+.amx-arrow-head {
+  fill: #4ade80;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: amx-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 1.1s forwards;
+}
+@keyframes amx-pop {
+  from { opacity: 0; transform: scale(0); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Burst sparks: dots and medical crosses */
+.amx-spark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--c);
+  opacity: 0;
+  animation: amx-burst 0.9s cubic-bezier(0.2, 0.8, 0.3, 1) 0.4s both;
+}
+.amx-plus {
+  background: transparent;
+  width: 14px;
+  height: 14px;
+}
+.amx-plus::before,
+.amx-plus::after {
+  content: "";
+  position: absolute;
+  inset: 5px 0;
+  border-radius: 2px;
+  background: var(--c);
+}
+.amx-plus::after {
+  inset: 0 5px;
+}
+
+/* Heartbeat line + tagline */
+.amx-ecg {
+  position: relative;
+  width: 220px;
+  height: 34px;
+  margin-top: 46px;
+  overflow: visible;
+}
+.amx-ecg path {
+  fill: none;
+  stroke: #1f4db5;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 420;
+  stroke-dashoffset: 420;
+  filter: drop-shadow(0 0 4px rgba(32, 196, 214, 0.6));
+  animation: amx-draw 1s ease-in-out 0.35s forwards;
+}
+.amx-tagline {
+  margin-top: 6px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #ffffff;
+  /* Green outline (a shade darker than the logo arrow) drawn behind the fill */
+  -webkit-text-stroke: 3px #16a34a;
+  paint-order: stroke fill;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: amx-fade-up 0.5s ease-out 0.7s both;
+}
+
+/* Lines either side of the tagline, like the logo */
+.amx-tagline::before,
+.amx-tagline::after {
+  content: "";
+  width: 34px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #14b39a, #20c4d6);
+}
+
+@keyframes amx-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes amx-fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes amx-stage-out {
+  0% { transform: scale(1); filter: blur(0); }
+  30% { transform: scale(0.94); }
+  100% { transform: scale(1.35); filter: blur(6px); opacity: 0; }
+}
+@keyframes amx-blob-pop {
+  0% { transform: scale(0) rotate(-20deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+@keyframes amx-blob-morph {
+  0%, 100% { border-radius: 42% 58% 63% 37% / 45% 40% 60% 55%; }
+  33% { border-radius: 60% 40% 38% 62% / 55% 62% 38% 45%; }
+  66% { border-radius: 38% 62% 55% 45% / 40% 52% 48% 60%; }
+}
+@keyframes amx-drop {
+  0% { opacity: 0; transform: translateY(-160%) rotate(var(--r)) scale(0.4); }
+  55% { opacity: 1; transform: translateY(6%) rotate(0) scale(1.08, 0.82); }
+  75% { transform: translateY(-8%) scale(0.95, 1.08); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes amx-bob {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-7%) rotate(var(--w)); }
+}
+@keyframes amx-spin-in {
+  0% { opacity: 0; transform: scale(0) rotate(-540deg); }
+  70% { opacity: 1; transform: scale(1.35) rotate(15deg); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes amx-burst {
+  0% { opacity: 1; transform: translate(-50%, -50%) rotate(var(--a)) translateX(0) scale(0); }
+  60% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--a)) translateX(var(--d)) scale(1); }
+}
+@keyframes amx-draw { to { stroke-dashoffset: 0; } }
+@keyframes amx-fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------------------------------------------------------------------------
+   Home: "Who We Are" stat cards + "What Makes Us Different" hub animations
+--------------------------------------------------------------------------- */
+@keyframes hub-ripple {
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+.hub-ripple {
+  animation: hub-ripple 3.6s cubic-bezier(0.2, 0.6, 0.35, 1) infinite;
+}
+
+@keyframes hub-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.hub-float {
+  animation: hub-float 6s ease-in-out infinite;
+}
+
+@keyframes hub-glow {
+  0%, 100% { box-shadow: 0 0 0 16px rgba(11, 143, 135, 0.08), 0 0 0 32px rgba(11, 143, 135, 0.04), 0 20px 60px -20px rgba(32, 196, 214, 0.35); }
+  50% { box-shadow: 0 0 0 18px rgba(11, 143, 135, 0.12), 0 0 0 36px rgba(11, 143, 135, 0.06), 0 20px 70px -15px rgba(32, 196, 214, 0.55); }
+}
+.hub-glow {
+  animation: hub-glow 4s ease-in-out infinite;
+}
+
+/* Diagonal light sweep across a card on hover */
+.card-sheen {
+  pointer-events: none;
+  position: absolute;
+  inset: 0 auto 0 -60%;
+  width: 50%;
+  transform: skewX(-18deg);
+  background: linear-gradient(90deg, transparent, rgba(32, 196, 214, 0.12), transparent);
+  opacity: 0;
+  transition: left 0.8s ease, opacity 0.3s ease;
+}
+.group:hover .card-sheen {
+  left: 120%;
+  opacity: 1;
+}

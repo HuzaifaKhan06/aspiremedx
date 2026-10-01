@@ -7,7 +7,6 @@ import ServicesCarousel from "@/components/ServicesCarousel";
 import SpecialtiesSection from "@/components/SpecialtiesSection";
 import WhyTrust from "@/components/WhyTrust";
 import SiteFaqs from "@/components/SiteFaqs";
-import ContactCTA from "@/components/ContactCTA";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -23,7 +22,6 @@ export default function Home() {
         <SpecialtiesSection />
         <WhyTrust />
         <SiteFaqs />
-        <ContactCTA />
       </main>
       <Footer />
     </>

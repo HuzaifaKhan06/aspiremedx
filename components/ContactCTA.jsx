@@ -56,7 +56,7 @@ export default function ContactCTA() {
           <p className="font-mono text-xs font-semibold uppercase tracking-wider text-[var(--color-cyan)]">
             Get started
           </p>
-          <h2 className="mt-3 font-[family-name:var(--font-display)] text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+          <h2 className="mt-3 font-[family-name:var(--font-display)] text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
             Ready to see AspireMedX in action?
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-white/60">

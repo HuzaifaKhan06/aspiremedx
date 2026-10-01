@@ -11,7 +11,7 @@ const stats = [
 export default function AboutStats() {
   return (
     <section
-      className="py-16"
+      className="py-10"
       style={{ background: "linear-gradient(135deg, #0b1f33 0%, #173b57 50%, #0b2a22 100%)" }}
     >
       {/* Hex overlay */}
@@ -25,47 +25,47 @@ export default function AboutStats() {
       </svg>
 
       <div className="relative mx-auto max-w-6xl px-6">
-        <Reveal className="mb-12 text-center">
+        <Reveal className="mb-8 text-center">
           <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[#20c4d6]">
             By The Numbers
           </p>
-          <h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-extrabold text-white sm:text-4xl">
+          <h2 className="mt-2 font-[family-name:var(--font-display)] text-xl font-extrabold text-white sm:text-2xl">
             Results That Speak for Themselves
           </h2>
         </Reveal>
 
-        <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {stats.map((stat, i) => (
             <Reveal key={stat.label} delay={i * 80}>
-              <div className="group rounded-2xl border border-white/10 bg-white/5 p-7 text-center backdrop-blur-sm transition-all hover:border-[#20c4d6]/30 hover:bg-white/8">
+              <div className="group rounded-xl border border-white/10 bg-white/5 p-5 text-center backdrop-blur-sm transition-all hover:border-[#20c4d6]/30 hover:bg-white/8">
                 <p
-                  className="font-[family-name:var(--font-display)] text-4xl font-extrabold"
+                  className="font-[family-name:var(--font-display)] text-3xl font-extrabold"
                   style={{ color: stat.color }}
                 >
                   {stat.prefix || ""}
                   <Counter value={stat.value} suffix="" onMount={false} duration={1600} />
                   {stat.suffix}
                 </p>
-                <p className="mt-3 text-sm font-semibold text-white/60">{stat.label}</p>
-                <div className="mx-auto mt-4 h-0.5 w-8 rounded-full" style={{ background: stat.color, opacity: 0.4 }} />
+                <p className="mt-2 text-xs font-semibold text-white/60">{stat.label}</p>
+                <div className="mx-auto mt-3 h-0.5 w-8 rounded-full" style={{ background: stat.color, opacity: 0.4 }} />
               </div>
             </Reveal>
           ))}
         </div>
 
         {/* Two accent quotes */}
-        <Reveal className="mt-14 grid gap-5 sm:grid-cols-2" delay={100}>
+        <Reveal className="mt-8 grid gap-4 sm:grid-cols-2" delay={100}>
           {[
             { quote: "We don't just file claims — we own the outcome.", attr: "AspireMedX Philosophy" },
             { quote: "Credentialing, enrollment, and billing don't have to be three separate headaches.", attr: "Our Client Promise" },
           ].map((q) => (
             <div
               key={q.attr}
-              className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-7"
+              className="relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-5"
             >
-              <span className="absolute -left-2 -top-4 font-serif text-8xl leading-none text-[#20c4d6] opacity-20 select-none" aria-hidden>"</span>
-              <p className="relative font-[family-name:var(--font-display)] text-lg font-semibold text-white">{q.quote}</p>
-              <p className="mt-4 font-mono text-[10px] uppercase tracking-widest text-white/30">{q.attr}</p>
+              <span className="absolute -left-2 -top-4 font-serif text-6xl leading-none text-[#20c4d6] opacity-20 select-none" aria-hidden>&ldquo;</span>
+              <p className="relative font-[family-name:var(--font-display)] text-base font-semibold text-white">{q.quote}</p>
+              <p className="mt-3 font-mono text-[10px] uppercase tracking-widest text-white/30">{q.attr}</p>
             </div>
           ))}
         </Reveal>

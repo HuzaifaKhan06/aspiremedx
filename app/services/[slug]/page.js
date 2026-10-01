@@ -32,7 +32,7 @@ export default async function ServiceDetailPage({ params }) {
       <Navbar />
       <main className="bg-[var(--color-bg)]">
         {/* Page hero */}
-        <section className="border-b border-[var(--color-line)] bg-white py-16">
+        <section className="border-b border-[var(--color-line)] bg-white py-12">
           <div className="mx-auto max-w-5xl px-6">
             <Link
               href="/services"
@@ -40,7 +40,7 @@ export default async function ServiceDetailPage({ params }) {
             >
               ← All services
             </Link>
-            <h1 className="mt-5 font-[family-name:var(--font-display)] text-4xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-5xl">
+            <h1 className="mt-5 font-[family-name:var(--font-display)] text-3xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-4xl">
               {service.title}
             </h1>
             <p className="mt-4 max-w-2xl text-lg text-[var(--color-muted)]">
@@ -131,7 +131,7 @@ export default async function ServiceDetailPage({ params }) {
               </p>
             </div>
             <Link
-              href="/#contact"
+              href="/contact"
               className="shrink-0 rounded-lg bg-[var(--color-cyan)] px-6 py-3 text-sm font-semibold text-[var(--color-navy)] transition-all hover:brightness-95"
             >
               {cta.secondary}

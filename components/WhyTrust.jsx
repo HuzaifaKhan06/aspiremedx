@@ -71,7 +71,7 @@ export default function WhyTrust() {
             <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[var(--color-teal)]">
               Why Choose Us
             </p>
-            <h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-4xl">
+            <h2 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-3xl">
               Why Practices Trust AspireMedX
             </h2>
           </Reveal>

@@ -9,6 +9,12 @@ import { sendChatEmail } from "@/lib/chatbot/sendEmail";
 const STORAGE_KEY = "amx-chat-v1";
 const TEASER_KEY = "amx-chat-teaser-dismissed";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const WHATSAPP_DEFAULT = "Hi AspireMedX! I'd like to know more about your services.";
+
+// wa.me link to the team's WhatsApp with the message pre-typed
+function whatsappUrl(text) {
+  return `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(text || WHATSAPP_DEFAULT)}`;
+}
 
 function loadSaved() {
   if (typeof window === "undefined") return null;
@@ -135,6 +141,9 @@ export default function ChatWidget() {
     setMessages((prev) => [...prev, userMessage(clean)]);
     const result = reply(clean, botState);
     setBotState(result.state);
+    // Message ready for WhatsApp — open it straight away while we're still
+    // inside the click/keypress (so the browser allows the new tab).
+    if (result.whatsapp) window.open(whatsappUrl(result.whatsapp), "_blank", "noopener,noreferrer");
     if (result.sendRequested && result.state.flow?.data) {
       submitEmail(result.state.flow.data, result.state);
       return;
@@ -187,7 +196,7 @@ export default function ChatWidget() {
           <button type="button" onClick={toggleOpen} className="text-left">
             <p className="text-sm font-bold text-[var(--color-navy)]">Hi there! 👋</p>
             <p className="mt-1 text-xs leading-relaxed text-[var(--color-muted)]">
-              Questions about billing, credentialing or pricing? I answer instantly.
+              Questions about billing, credentialing or this month&apos;s offers? I answer instantly — or chat with us on WhatsApp.
             </p>
           </button>
         </div>
@@ -263,6 +272,16 @@ export default function ChatWidget() {
             <div className="relative flex items-center gap-1">
               {view === "chat" && (
                 <>
+                  <a
+                    href={whatsappUrl()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Chat on WhatsApp"
+                    title="Chat on WhatsApp"
+                    className="flex h-8 w-8 items-center justify-center rounded-full text-white/70 transition-colors hover:bg-white/10 hover:text-[#25d366]"
+                  >
+                    <WhatsAppIcon size={16} />
+                  </a>
                   <HeaderButton label="Email our team" onClick={() => openEmailForm(botState.flow?.data)}>
                     <path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" />
                     <path d="m22 6-10 7L2 6" />
@@ -530,6 +549,18 @@ function ActionButton({ action, onAction }) {
       </Link>
     );
   }
+  if (action.action === "whatsapp") {
+    return (
+      <a
+        href={whatsappUrl(action.text)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 rounded-lg bg-[#25d366] px-3 py-1.5 text-xs font-bold text-white shadow-sm transition-colors hover:bg-[#1ebe5b]"
+      >
+        <WhatsAppIcon size={14} /> {action.label}
+      </a>
+    );
+  }
   if (action.action === "call") {
     return (
       <a href={`tel:${contact.phone.replace(/[^+\d]/g, "")}`} className={cls}>
@@ -541,6 +572,15 @@ function ActionButton({ action, onAction }) {
     <button type="button" onClick={() => onAction(action)} className={cls}>
       ✉️ {action.label}
     </button>
+  );
+}
+
+function WhatsAppIcon({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M17.5 14.4c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-.9 1.2-.3.2-.6.1a8.2 8.2 0 0 1-2.4-1.5 9 9 0 0 1-1.7-2.1c-.2-.3 0-.5.1-.6l.4-.5.3-.5a.5.5 0 0 0 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6a1.2 1.2 0 0 0-.8.4 3.5 3.5 0 0 0-1.1 2.6 6 6 0 0 0 1.3 3.2 13.8 13.8 0 0 0 5.3 4.7c2 .8 2.7.9 3.6.7a3 3 0 0 0 2-1.4 2.5 2.5 0 0 0 .2-1.4c-.1-.1-.3-.2-.6-.3z" />
+      <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z" />
+    </svg>
   );
 }
 

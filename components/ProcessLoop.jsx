@@ -9,7 +9,7 @@ export default function ProcessLoop() {
           <p className="font-mono text-xs font-semibold uppercase tracking-wider text-[var(--color-teal)]">
             Our Proven Process
           </p>
-          <h2 className="mt-3 font-[family-name:var(--font-display)] text-3xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-4xl">
+          <h2 className="mt-3 font-[family-name:var(--font-display)] text-2xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-3xl">
             From assessment to optimization — a structured path.
           </h2>
           <p className="mt-4 text-[var(--color-muted)]">{processIntro}</p>

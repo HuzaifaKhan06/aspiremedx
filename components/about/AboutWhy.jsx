@@ -30,52 +30,52 @@ const differentiators = [
 export default function AboutWhy() {
   return (
     <section
-      className="py-20"
+      className="py-12"
       style={{ background: "linear-gradient(160deg, #0b1f33 0%, #0b2a22 100%)" }}
     >
       <div className="mx-auto max-w-6xl px-6">
-        <Reveal className="mb-14 text-center">
+        <Reveal className="mb-8 text-center">
           <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[#20c4d6]">
             Why AspireMedX
           </p>
-          <h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-extrabold text-white sm:text-4xl">
+          <h2 className="mt-2 font-[family-name:var(--font-display)] text-xl font-extrabold text-white sm:text-2xl">
             What Makes Us Different
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-white/50">
-            Not every RCM firm is built the same. Here's what separates an AspireMedX engagement from the alternative.
+          <p className="mx-auto mt-2 max-w-xl text-sm text-white/50">
+            Not every RCM firm is built the same. Here&apos;s what separates an AspireMedX engagement from the alternative.
           </p>
         </Reveal>
 
-        <div className="grid gap-6 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           {differentiators.map((d, i) => (
             <Reveal key={d.title} delay={i * 80}>
-              <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm transition-all hover:border-[#20c4d6]/30 hover:bg-white/8">
+              <div className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition-all hover:border-[#20c4d6]/30 hover:bg-white/8">
                 {/* Hex corner accent */}
                 <svg className="pointer-events-none absolute -right-3 -top-3 h-16 w-16 opacity-10" aria-hidden>
                   <polygon points="32,2 60,17 60,47 32,62 4,47 4,17" fill="none" stroke="#20c4d6" strokeWidth="1" />
                 </svg>
 
                 {/* Stat bubble */}
-                <div className="mb-6 flex items-center gap-4">
+                <div className="mb-4 flex items-center gap-3">
                   <div
-                    className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg"
                     style={{ background: "linear-gradient(135deg, #0b8f87, #20c4d6)" }}
                   >
-                    <span className="font-[family-name:var(--font-display)] text-lg font-extrabold text-white">
+                    <span className="font-[family-name:var(--font-display)] text-sm font-extrabold text-white">
                       {d.stat}
                     </span>
                   </div>
-                  <p className="text-sm font-semibold text-white/50">{d.statLabel}</p>
+                  <p className="text-xs font-semibold text-white/50">{d.statLabel}</p>
                 </div>
 
-                <h3 className="font-[family-name:var(--font-display)] text-xl font-bold text-white">
+                <h3 className="font-[family-name:var(--font-display)] text-base font-bold text-white">
                   {d.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/55">{d.body}</p>
+                <p className="mt-2 text-[13px] leading-relaxed text-white/55">{d.body}</p>
 
                 {/* Bottom gradient line */}
                 <div
-                  className="mt-7 h-px w-full opacity-20 transition-opacity group-hover:opacity-50"
+                  className="mt-5 h-px w-full opacity-20 transition-opacity group-hover:opacity-50"
                   style={{ background: "linear-gradient(to right, #0b8f87, #20c4d6, transparent)" }}
                 />
               </div>
@@ -84,9 +84,9 @@ export default function AboutWhy() {
         </div>
 
         {/* Comparison row */}
-        <Reveal className="mt-14" delay={100}>
+        <Reveal className="mt-8" delay={100}>
           <div className="overflow-hidden rounded-2xl border border-white/10">
-            <div className="grid grid-cols-3 bg-white/5 px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/30">
+            <div className="grid grid-cols-3 bg-white/5 px-5 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/30">
               <span>Capability</span>
               <span className="text-center">Typical Billing Firm</span>
               <span className="text-right text-[#20c4d6]">AspireMedX</span>
@@ -101,7 +101,7 @@ export default function AboutWhy() {
             ].map(([cap, typical, ours], i) => (
               <div
                 key={cap}
-                className={`grid grid-cols-3 border-t border-white/5 px-6 py-4 text-sm ${i % 2 === 0 ? "bg-white/[0.02]" : ""}`}
+                className={`grid grid-cols-3 border-t border-white/5 px-5 py-2.5 text-[13px] ${i % 2 === 0 ? "bg-white/[0.02]" : ""}`}
               >
                 <span className="font-medium text-white/70">{cap}</span>
                 <span className="text-center text-white/30">{typical}</span>

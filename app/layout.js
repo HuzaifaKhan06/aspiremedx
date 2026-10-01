@@ -1,6 +1,7 @@
-import { Manrope, Inter, IBM_Plex_Mono } from "next/font/google";
+import { Manrope, Inter, IBM_Plex_Mono, Montserrat } from "next/font/google";
 import "./globals.css";
 import ChatWidget from "@/components/chatbot/ChatWidget";
+import PageTransition from "@/components/PageTransition";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -20,6 +21,14 @@ const plexMono = IBM_Plex_Mono({
   weight: ["400", "500"],
 });
 
+// Heavy geometric face matching the AspireMedX logo lettering — used only by
+// the page-transition wordmark.
+const montserrat = Montserrat({
+  variable: "--font-fun",
+  subsets: ["latin"],
+  weight: ["800"],
+});
+
 export const metadata = {
   title: "AspireMedX | Smart Revenue Cycle Solutions",
   description:
@@ -30,10 +39,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${manrope.variable} ${inter.variable} ${plexMono.variable} antialiased`}
+        className={`${manrope.variable} ${inter.variable} ${plexMono.variable} ${montserrat.variable} antialiased`}
       >
         {children}
         <ChatWidget />
+        <PageTransition />
       </body>
     </html>
   );

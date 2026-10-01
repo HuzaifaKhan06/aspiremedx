@@ -66,7 +66,7 @@ export default function ServicesCarousel() {
               <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[#20c4d6]">
                 Our Services
               </p>
-              <h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+              <h2 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
                 End-to-End RCM Services
               </h2>
             </div>
@@ -102,7 +102,7 @@ export default function ServicesCarousel() {
             <Link
               key={service.code + "-" + i}
               href={`/services/${service.slug}`}
-              className="group relative flex h-72 w-72 shrink-0 flex-col justify-end overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.5)]"
+              className="group relative flex h-60 w-60 shrink-0 flex-col justify-end overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.5)]"
             >
               {/* Gradient background */}
               <div className={`absolute inset-0 bg-gradient-to-br ${gradients[i % gradients.length]}`} />

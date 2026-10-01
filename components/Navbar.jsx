@@ -2,19 +2,73 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { nav, specialities, serviceDetails, contact, cta } from "@/lib/content";
+import SpecialityIcon from "@/components/speciality/SpecialityIcon";
+import ServiceIcon from "@/components/ServiceIcon";
+import { nav, specialities, featuredSpecialitySlugs, serviceDetails, serviceGroups, contact, cta } from "@/lib/content";
+
+// Services grouped for the dropdown — billing first, digital growth last.
+const groupedServices = serviceGroups.map((g) => ({
+  label: g.label,
+  items: g.slugs.map((slug) => serviceDetails.find((s) => s.slug === slug)).filter(Boolean),
+}));
+
+const coreSpecialities = specialities.filter((s) => featuredSpecialitySlugs.includes(s.slug));
+const moreSpecialities = specialities.filter((s) => !featuredSpecialitySlugs.includes(s.slug));
+
+// "Cardiology Billing" → "Cardiology" for the compact dropdown labels
+const shortSpecialityName = (title) => title.replace(/ Billing( Services)?$/, "");
+
+// Desktop nav link styling — the current page gets bold navy text and a
+// teal underline; other links grow the same underline on hover.
+const navLinkClass = (active) =>
+  `group/nl relative flex items-center gap-1 text-[13px] transition-colors ${
+    active ? "font-semibold text-[var(--color-navy)]" : "font-medium text-[var(--color-muted)] hover:text-[var(--color-navy)]"
+  }`;
+
+function ActiveUnderline({ active }) {
+  return (
+    <span
+      aria-hidden
+      className={`pointer-events-none absolute -bottom-2 left-0 h-[2px] w-full origin-left rounded-full bg-gradient-to-r from-[var(--color-teal)] to-[var(--color-cyan)] transition-transform duration-300 ${
+        active ? "scale-x-100" : "scale-x-0 group-hover/nl:scale-x-100"
+      }`}
+    />
+  );
+}
+
+const mobileLinkClass = (active) =>
+  `border-l-2 py-2 pl-3 text-sm ${
+    active ? "border-[var(--color-teal)] font-semibold text-[var(--color-navy)]" : "border-transparent font-medium text-[var(--color-muted)]"
+  }`;
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [servicesOpenMobile, setServicesOpenMobile] = useState(false);
   const [specialityOpenMobile, setSpecialityOpenMobile] = useState(false);
+  const pathname = usePathname();
+
+  // Hash links (e.g. /#why-us) are in-page anchors, never "the current page".
+  const isActive = (href) =>
+    href === "/"
+      ? pathname === "/"
+      : !href.includes("#") && (pathname === href || pathname.startsWith(`${href}/`));
+
+  // Next.js doesn't scroll when a link points at the page you're already on,
+  // so the logo / Home link scroll back to the top manually on the home page.
+  const scrollTopIfHome = (e) => {
+    if (pathname !== "/") return;
+    e.preventDefault();
+    if (window.location.hash) window.history.replaceState(null, "", "/");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--color-line)] bg-white/95 backdrop-blur">
       {/* Single row — logo, nav links, CTA on desktop; logo + hamburger on mobile */}
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-3 lg:gap-4">
-        <Link href="/" className="flex shrink-0 items-center">
+        <Link href="/" onClick={scrollTopIfHome} className="flex shrink-0 items-center">
           <Image
             src="/brand/logo-navbar.png"
             alt="AspireMedX — Smart Revenue Cycle Solutions"
@@ -26,35 +80,42 @@ export default function Navbar() {
         </Link>
 
         <nav className="hidden shrink-0 items-center gap-4 whitespace-nowrap lg:flex">
-          <Link
-            href="/"
-            className="text-[13px] font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-navy)]"
-          >
+          <Link href="/" onClick={scrollTopIfHome} className={navLinkClass(isActive("/"))}>
             Home
+            <ActiveUnderline active={isActive("/")} />
           </Link>
           {/* Services — link + hover dropdown */}
           <div className="group relative">
-            <Link
-              href="/services"
-              className="flex items-center gap-1 text-[13px] font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-navy)]"
-            >
+            <Link href="/services" className={navLinkClass(isActive("/services"))}>
               Services
               <ChevronIcon />
+              <ActiveUnderline active={isActive("/services")} />
             </Link>
 
-            <div className="invisible absolute left-0 top-full z-50 w-64 translate-y-1 rounded-xl border border-[var(--color-line)] bg-white p-2 opacity-0 shadow-[0_20px_45px_-20px_rgba(11,31,51,0.35)] transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-              {serviceDetails.map((service) => (
-                <Link
-                  key={service.slug}
-                  href={`/services/${service.slug}`}
-                  className="block rounded-lg px-3 py-2.5 text-sm text-[var(--color-ink)] hover:bg-[var(--color-bg)] hover:text-[var(--color-navy)]"
-                >
-                  {service.title}
-                </Link>
+            <div className="invisible absolute -left-36 top-full z-50 w-[760px] translate-y-1 rounded-xl border border-[var(--color-line)] bg-white p-5 opacity-0 shadow-[0_20px_45px_-20px_rgba(11,31,51,0.35)] transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+              {/* Same layout as the Speciality dropdown — stacked groups, three columns */}
+              {groupedServices.map((group, gi) => (
+                <div key={group.label} className={gi > 0 ? "mt-4 border-t border-[var(--color-line)] pt-4" : ""}>
+                  <p className="px-3 pb-2 font-mono text-[10px] font-semibold uppercase tracking-widest text-[var(--color-teal)]">
+                    {group.label}
+                  </p>
+                  <div className="grid grid-cols-3 gap-x-2">
+                    {group.items.map((service) => (
+                      <Link
+                        key={service.slug}
+                        href={`/services/${service.slug}`}
+                        className="group/si flex items-center gap-2.5 rounded-md px-2 py-1.5 text-[13px] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-bg)] hover:text-[var(--color-teal)]"
+                      >
+                        <ServiceIcon slug={service.slug} className="h-5 w-5 shrink-0 text-[var(--color-teal)] transition-colors group-hover/si:text-[var(--color-cyan)]" />
+                        {service.title}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
               ))}
               <Link
                 href="/services"
-                className="mt-1 block rounded-lg border-t border-[var(--color-line)] px-3 pt-3 text-sm font-semibold text-[var(--color-teal)] hover:text-[var(--color-navy)]"
+                className="mt-4 block rounded-md border-t border-[var(--color-line)] px-3 pt-3 text-sm font-semibold text-[var(--color-teal)] hover:text-[var(--color-navy)]"
               >
                 View all services →
               </Link>
@@ -63,27 +124,38 @@ export default function Navbar() {
 
           {/* Speciality — link + hover dropdown */}
           <div className="group relative">
-            <Link
-              href="/speciality"
-              className="flex items-center gap-1 text-[13px] font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-navy)]"
-            >
+            <Link href="/speciality" className={navLinkClass(isActive("/speciality"))}>
               Speciality
               <ChevronIcon />
+              <ActiveUnderline active={isActive("/speciality")} />
             </Link>
 
-            <div className="invisible absolute left-0 top-full z-50 w-72 translate-y-1 rounded-md border border-[var(--color-line)] bg-white p-2 opacity-0 shadow-[0_20px_45px_-20px_rgba(11,31,51,0.35)] transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-              {specialities.map((item) => (
-                <Link
-                  key={item.slug}
-                  href={`/speciality/${item.slug}`}
-                  className="block rounded-md px-3 py-2 text-sm text-[var(--color-ink)] hover:bg-[var(--color-bg)] hover:text-[var(--color-navy)]"
-                >
-                  {item.title}
-                </Link>
+            <div className="invisible absolute -left-56 top-full z-50 w-[760px] translate-y-1 rounded-xl border border-[var(--color-line)] bg-white p-5 opacity-0 shadow-[0_20px_45px_-20px_rgba(11,31,51,0.35)] transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+              {[
+                { label: "Core Specialities", items: coreSpecialities },
+                { label: "More Specialities", items: moreSpecialities },
+              ].map((group, gi) => (
+                <div key={group.label} className={gi > 0 ? "mt-4 border-t border-[var(--color-line)] pt-4" : ""}>
+                  <p className="px-3 pb-2 font-mono text-[10px] font-semibold uppercase tracking-widest text-[var(--color-teal)]">
+                    {group.label}
+                  </p>
+                  <div className="grid grid-cols-3 gap-x-2">
+                    {group.items.map((item) => (
+                      <Link
+                        key={item.slug}
+                        href={`/speciality/${item.slug}`}
+                        className="flex items-center gap-2.5 rounded-md px-2 py-1.5 text-[13px] text-[var(--color-ink)] transition-colors [--ic-3:#ffffff] hover:bg-[var(--color-bg)] hover:text-[var(--color-teal)] hover:[--ic-3:#f3f8fa]"
+                      >
+                        <SpecialityIcon slug={item.slug} className="h-5 w-5 shrink-0" />
+                        {shortSpecialityName(item.title)}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
               ))}
               <Link
                 href="/speciality"
-                className="mt-1 block rounded-md border-t border-[var(--color-line)] px-3 pt-3 text-sm font-semibold text-[var(--color-teal)] hover:text-[var(--color-navy)]"
+                className="mt-4 block rounded-md border-t border-[var(--color-line)] px-3 pt-3 text-sm font-semibold text-[var(--color-teal)] hover:text-[var(--color-navy)]"
               >
                 View all specialities →
               </Link>
@@ -93,13 +165,10 @@ export default function Navbar() {
           {nav
             .filter((item) => item.label !== "Services" && item.label !== "Speciality")
             .map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="text-[13px] font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-navy)]"
-              >
+              <Link key={item.href} href={item.href} className={navLinkClass(isActive(item.href))}>
                 {item.label}
-              </a>
+                <ActiveUnderline active={isActive(item.href)} />
+              </Link>
             ))}
         </nav>
 
@@ -151,7 +220,7 @@ export default function Navbar() {
         </div>
 
         <Link
-          href="/#contact"
+          href="/contact"
           className="hidden shrink-0 rounded-md bg-[var(--color-navy)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-navy-soft)] lg:block"
         >
           {cta.secondary}
@@ -177,15 +246,18 @@ export default function Navbar() {
         <nav className="flex flex-col gap-1 border-t border-[var(--color-line)] px-6 py-4 lg:hidden">
           <Link
             href="/"
-            onClick={() => setOpen(false)}
-            className="py-2 text-sm font-medium text-[var(--color-muted)]"
+            onClick={(e) => {
+              setOpen(false);
+              scrollTopIfHome(e);
+            }}
+            className={mobileLinkClass(isActive("/"))}
           >
             Home
           </Link>
           {/* Services mobile accordion */}
           <button
             onClick={() => setServicesOpenMobile((v) => !v)}
-            className="flex items-center justify-between py-2 text-left text-sm font-medium text-[var(--color-muted)]"
+            className={`flex items-center justify-between text-left ${mobileLinkClass(isActive("/services"))}`}
             aria-expanded={servicesOpenMobile}
           >
             <Link href="/services" onClick={(e) => e.stopPropagation()} className="hover:text-[var(--color-navy)]">
@@ -195,22 +267,30 @@ export default function Navbar() {
           </button>
           {servicesOpenMobile && (
             <div className="ml-3 flex flex-col gap-1 border-l border-[var(--color-line)] pl-3">
-              {serviceDetails.map((service) => (
-                <Link
-                  key={service.slug}
-                  href={`/services/${service.slug}`}
-                  onClick={() => setOpen(false)}
-                  className="py-1.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-navy)]"
-                >
-                  {service.title}
-                </Link>
+              {groupedServices.map((group) => (
+                <div key={group.label} className="flex flex-col gap-1">
+                  <p className="pt-2 font-mono text-[10px] font-semibold uppercase tracking-widest text-[var(--color-teal)]">
+                    {group.label}
+                  </p>
+                  {group.items.map((service) => (
+                    <Link
+                      key={service.slug}
+                      href={`/services/${service.slug}`}
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-2.5 py-1.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-navy)]"
+                    >
+                      <ServiceIcon slug={service.slug} className="h-5 w-5 shrink-0 text-[var(--color-teal)]" />
+                      {service.title}
+                    </Link>
+                  ))}
+                </div>
               ))}
             </div>
           )}
 
           <button
             onClick={() => setSpecialityOpenMobile((v) => !v)}
-            className="flex items-center justify-between py-2 text-left text-sm font-medium text-[var(--color-muted)]"
+            className={`flex items-center justify-between text-left ${mobileLinkClass(isActive("/speciality"))}`}
             aria-expanded={specialityOpenMobile}
           >
             <Link href="/speciality" onClick={(e) => e.stopPropagation()} className="hover:text-[var(--color-navy)]">
@@ -220,15 +300,26 @@ export default function Navbar() {
           </button>
           {specialityOpenMobile && (
             <div className="ml-3 flex flex-col gap-1 border-l border-[var(--color-line)] pl-3">
-              {specialities.map((item) => (
-                <Link
-                  key={item.slug}
-                  href={`/speciality/${item.slug}`}
-                  onClick={() => setOpen(false)}
-                  className="py-1.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-navy)]"
-                >
-                  {item.title}
-                </Link>
+              {[
+                { label: "Core Specialities", items: coreSpecialities },
+                { label: "More Specialities", items: moreSpecialities },
+              ].map((group) => (
+                <div key={group.label} className="flex flex-col gap-1">
+                  <p className="pt-2 font-mono text-[10px] font-semibold uppercase tracking-widest text-[var(--color-teal)]">
+                    {group.label}
+                  </p>
+                  {group.items.map((item) => (
+                    <Link
+                      key={item.slug}
+                      href={`/speciality/${item.slug}`}
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-2.5 py-1.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-navy)]"
+                    >
+                      <SpecialityIcon slug={item.slug} className="h-5 w-5 shrink-0" />
+                      {shortSpecialityName(item.title)}
+                    </Link>
+                  ))}
+                </div>
               ))}
             </div>
           )}
@@ -236,14 +327,14 @@ export default function Navbar() {
           {nav
             .filter((item) => item.label !== "Services" && item.label !== "Speciality")
             .map((item) => (
-              <a
+              <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="py-2 text-sm font-medium text-[var(--color-muted)]"
+                className={mobileLinkClass(isActive(item.href))}
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
 
           <a
@@ -259,7 +350,7 @@ export default function Navbar() {
           </a>
 
           <Link
-            href="/#contact"
+            href="/contact"
             onClick={() => setOpen(false)}
             className="mt-2 rounded-md bg-[var(--color-navy)] px-4 py-2 text-center text-sm font-semibold text-white"
           >

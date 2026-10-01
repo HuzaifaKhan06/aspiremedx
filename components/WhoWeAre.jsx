@@ -24,16 +24,25 @@ export default function WhoWeAre() {
           <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[var(--color-teal)]">
             Who We Are
           </p>
-          <h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-4xl">
+          <h2 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-3xl">
             Numbers That Define Our Impact
           </h2>
         </Reveal>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat, i) => (
-            <Reveal key={stat.label} delay={i * 40}>
-              <div className="group rounded-xl border border-[var(--color-line)] bg-white p-6 shadow-sm transition-all duration-200 hover:border-[var(--color-teal)]/40 hover:shadow-md">
-                <p className="font-[family-name:var(--font-display)] text-3xl font-extrabold text-[var(--color-navy)]">
+            <Reveal key={stat.label} delay={i * 40} className="h-full">
+              <div className="group relative h-full overflow-hidden rounded-xl border border-[var(--color-line)] bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-[var(--color-teal)]/40 hover:shadow-[0_22px_45px_-22px_rgba(11,143,135,0.5)]">
+                {/* Top accent bar grows in on hover */}
+                <span aria-hidden className="absolute left-0 right-0 top-0 h-1 origin-left scale-x-0 bg-gradient-to-r from-[var(--color-teal)] to-[var(--color-cyan)] transition-transform duration-500 group-hover:scale-x-100" />
+                {/* Light sweep */}
+                <span aria-hidden className="card-sheen" />
+                {/* Corner ring blooms on hover */}
+                <span aria-hidden className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 scale-50 rounded-full border-[12px] border-[var(--color-teal)]/10 opacity-0 transition-all duration-700 group-hover:scale-100 group-hover:opacity-100" />
+                {/* Live dot */}
+                <span aria-hidden className="pulse-dot absolute right-4 top-4 h-1.5 w-1.5 rounded-full bg-[var(--color-teal)]/50 transition-colors group-hover:bg-[var(--color-cyan)]" />
+
+                <p className="relative origin-left font-[family-name:var(--font-display)] text-3xl font-extrabold text-[var(--color-navy)] transition-all duration-300 group-hover:scale-105 group-hover:text-[var(--color-teal)]">
                   {stat.static ? (
                     stat.static + (stat.suffix || "")
                   ) : (
@@ -44,8 +53,9 @@ export default function WhoWeAre() {
                     </>
                   )}
                 </p>
-                <p className="mt-2 text-sm font-semibold text-[var(--color-ink)]">{stat.label}</p>
-                <p className="mt-1 text-xs leading-relaxed text-[var(--color-muted)]">{stat.sub}</p>
+                <p className="relative mt-2 text-sm font-semibold text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-navy)]">{stat.label}</p>
+                <span aria-hidden className="relative mt-2 block h-px w-8 bg-[var(--color-teal)]/30 transition-all duration-500 group-hover:w-16 group-hover:bg-[var(--color-teal)]" />
+                <p className="relative mt-2 text-xs leading-relaxed text-[var(--color-muted)]">{stat.sub}</p>
               </div>
             </Reveal>
           ))}

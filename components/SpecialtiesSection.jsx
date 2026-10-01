@@ -74,7 +74,7 @@ export default function SpecialtiesSection() {
           <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[#20c4d6]">
             Expert Coverage
           </p>
-          <h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+          <h2 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
             Specialties &amp; Expert Teams
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-white/60">

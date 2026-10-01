@@ -2,6 +2,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SpecialityCard from "@/components/SpecialityCard";
+import SpecialityIcon from "@/components/speciality/SpecialityIcon";
 import { dmeDetail, specialities, contact, cta } from "@/lib/content";
 
 export const metadata = {
@@ -17,7 +18,7 @@ export default function DmeBillingPage() {
       <Navbar />
       <main className="bg-[var(--color-bg)]">
         {/* Breadcrumb + hero */}
-        <section className="border-b border-[var(--color-line)] bg-white py-16">
+        <section className="border-b border-[var(--color-line)] bg-white py-12">
           <div className="mx-auto max-w-6xl px-6">
             <p className="text-sm text-[var(--color-muted)]">
               <Link href="/" className="hover:text-[var(--color-navy)]">Home</Link>
@@ -29,18 +30,21 @@ export default function DmeBillingPage() {
 
             <div className="mt-6 grid gap-10 md:grid-cols-[1.3fr_1fr] md:items-center">
               <div>
+                <span className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--color-teal-tint)] shadow-[0_12px_30px_-18px_rgba(11,143,135,0.6)] [--ic-1:#0b8f87] [--ic-2:#20c4d6] [--ic-3:#e5f3f2]">
+                  <SpecialityIcon slug="dme-billing" className="h-10 w-10" />
+                </span>
                 <p className="font-mono text-xs uppercase tracking-wider text-[var(--color-teal)]">
                   Speciality billing
                 </p>
-                <h1 className="mt-3 font-[family-name:var(--font-display)] text-4xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-5xl">
+                <h1 className="mt-3 font-[family-name:var(--font-display)] text-3xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-4xl">
                   {dmeDetail.title}
                 </h1>
-                <p className="mt-4 max-w-xl text-lg text-[var(--color-muted)]">
+                <p className="mt-4 max-w-xl text-sm text-[var(--color-muted)] sm:text-base">
                   {dmeDetail.tagline}
                 </p>
                 <div className="mt-6 flex flex-wrap gap-4">
                   <Link
-                    href="/#contact"
+                    href="/contact"
                     className="rounded-md bg-[var(--color-navy)] px-6 py-3 text-sm font-semibold text-white hover:bg-[var(--color-navy-soft)]"
                   >
                     {cta.primary}
@@ -136,7 +140,7 @@ export default function DmeBillingPage() {
               <p className="mt-2 text-sm text-white/70">{contact.email} · {contact.phone}</p>
             </div>
             <Link
-              href="/#contact"
+              href="/contact"
               className="shrink-0 rounded-md bg-[var(--color-cyan)] px-6 py-3 text-sm font-semibold text-[var(--color-navy)] hover:brightness-95"
             >
               {cta.secondary}

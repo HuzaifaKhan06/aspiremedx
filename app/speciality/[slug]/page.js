@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SpecialityCard from "@/components/SpecialityCard";
+import SpecialityIcon from "@/components/speciality/SpecialityIcon";
 import { specialities, contact, cta } from "@/lib/content";
 
 export function generateStaticParams() {
@@ -32,15 +33,20 @@ export default async function SpecialityDetailPage({ params }) {
     <>
       <Navbar />
       <main className="bg-[var(--color-bg)]">
-        <section className="border-b border-[var(--color-line)] bg-white py-16">
+        <section className="border-b border-[var(--color-line)] bg-white py-12">
           <div className="mx-auto max-w-4xl px-6">
             <Link href="/speciality" className="text-sm font-semibold text-[var(--color-teal)] hover:text-[var(--color-navy)]">
               ← All specialities
             </Link>
-            <h1 className="mt-4 font-[family-name:var(--font-display)] text-4xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-5xl">
-              {speciality.title}
-            </h1>
-            <p className="mt-4 max-w-2xl text-lg text-[var(--color-muted)]">
+            <div className="mt-6 flex items-center gap-5">
+              <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[var(--color-teal-tint)] shadow-[0_12px_30px_-18px_rgba(11,143,135,0.6)] [--ic-1:#0b8f87] [--ic-2:#20c4d6] [--ic-3:#e5f3f2]">
+                <SpecialityIcon slug={speciality.slug} className="h-10 w-10" />
+              </span>
+              <h1 className="font-[family-name:var(--font-display)] text-3xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-4xl">
+                {speciality.title}
+              </h1>
+            </div>
+            <p className="mt-4 max-w-2xl text-sm text-[var(--color-muted)] sm:text-base">
               {speciality.tagline}
             </p>
           </div>
@@ -89,7 +95,7 @@ export default async function SpecialityDetailPage({ params }) {
               <p className="mt-2 text-sm text-white/70">{contact.email} · {contact.phone}</p>
             </div>
             <Link
-              href="/#contact"
+              href="/contact"
               className="shrink-0 rounded-md bg-[var(--color-cyan)] px-6 py-3 text-sm font-semibold text-[var(--color-navy)] hover:brightness-95"
             >
               {cta.secondary}

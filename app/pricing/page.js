@@ -18,14 +18,14 @@ export default function PricingPage() {
         <PricingClient />
 
         {/* FAQ */}
-        <section className="border-t border-[var(--color-line)] bg-white py-20">
-          <div className="mx-auto grid max-w-6xl gap-10 px-6 lg:grid-cols-[1fr_2fr]">
+        <section className="border-t border-[var(--color-line)] bg-white py-12">
+          <div className="mx-auto grid max-w-6xl gap-8 px-6 lg:grid-cols-[1fr_2fr]">
             <div>
-              <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[var(--color-teal)]">Pricing FAQ</p>
-              <h2 className="mt-3 font-[family-name:var(--font-display)] text-3xl font-extrabold tracking-tight text-[var(--color-navy)]">
+              <p className="font-mono text-[11px] font-semibold uppercase tracking-widest text-[var(--color-teal)]">Pricing FAQ</p>
+              <h2 className="mt-2 font-[family-name:var(--font-display)] text-xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-2xl">
                 Questions about pricing?
               </h2>
-              <p className="mt-4 text-[var(--color-muted)]">
+              <p className="mt-3 text-sm text-[var(--color-muted)]">
                 Still unsure which plan fits? Talk to us at{" "}
                 <a href={`mailto:${contact.email}`} className="font-semibold text-[var(--color-teal)] hover:text-[var(--color-navy)]">
                   {contact.email}
@@ -33,18 +33,18 @@ export default function PricingPage() {
                 .
               </p>
             </div>
-            <div className="divide-y divide-[var(--color-line)] rounded-2xl border border-[var(--color-line)]">
+            <div className="divide-y divide-[var(--color-line)] rounded-xl border border-[var(--color-line)]">
               {pricingFaqs.map((faq) => (
-                <details key={faq.question} className="group px-6 py-5">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-[family-name:var(--font-display)] text-base font-bold text-[var(--color-navy)] [&::-webkit-details-marker]:hidden">
+                <details key={faq.question} className="group px-5 py-4">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-[family-name:var(--font-display)] text-sm font-bold text-[var(--color-navy)] [&::-webkit-details-marker]:hidden">
                     {faq.question}
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--color-teal-tint)] text-[var(--color-teal)] transition-transform group-open:rotate-45">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--color-teal-tint)] text-[var(--color-teal)] transition-transform group-open:rotate-45">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden>
                         <path d="M12 5v14M5 12h14" />
                       </svg>
                     </span>
                   </summary>
-                  <p className="mt-3 text-sm leading-relaxed text-[var(--color-muted)]">{faq.answer}</p>
+                  <p className="mt-2 text-[13px] leading-relaxed text-[var(--color-muted)]">{faq.answer}</p>
                 </details>
               ))}
             </div>
@@ -52,10 +52,10 @@ export default function PricingPage() {
         </section>
 
         {/* Closing CTA */}
-        <section className="py-20">
+        <section className="py-12">
           <div className="mx-auto max-w-6xl px-6">
             <div
-              className="relative overflow-hidden rounded-3xl px-8 py-14 text-center text-white"
+              className="relative overflow-hidden rounded-2xl px-8 py-10 text-center text-white"
               style={{ background: "linear-gradient(135deg, #0b1f33 0%, #173b57 55%, #0b2a22 100%)" }}
             >
               <div
@@ -63,23 +63,23 @@ export default function PricingPage() {
                 style={{ background: "#20c4d6" }}
                 aria-hidden
               />
-              <h2 className="relative font-[family-name:var(--font-display)] text-3xl font-extrabold tracking-tight">
+              <h2 className="relative font-[family-name:var(--font-display)] text-xl font-extrabold tracking-tight sm:text-2xl">
                 Not sure which plan is right?
               </h2>
-              <p className="relative mx-auto mt-3 max-w-lg text-white/55">
+              <p className="relative mx-auto mt-2 max-w-lg text-sm text-white/55">
                 Get a free revenue and credentialing assessment — we&apos;ll recommend the plan that pays for itself.
               </p>
-              <div className="relative mt-8 flex flex-wrap justify-center gap-3">
+              <div className="relative mt-6 flex flex-wrap justify-center gap-3">
                 <Link
                   href="/contact"
-                  className="rounded-lg px-7 py-3.5 text-sm font-bold text-white shadow-[0_8px_24px_-8px_rgba(32,196,214,0.7)] transition-all hover:brightness-110"
+                  className="rounded-lg px-6 py-2.5 text-[13px] font-bold text-white shadow-[0_8px_24px_-8px_rgba(32,196,214,0.7)] transition-all hover:brightness-110"
                   style={{ background: "linear-gradient(135deg, #0b8f87, #20c4d6)" }}
                 >
                   Get a Free Assessment
                 </Link>
                 <a
                   href={`tel:${contact.phone.replace(/[^+\d]/g, "")}`}
-                  className="rounded-lg border border-white/20 px-7 py-3.5 text-sm font-bold text-white transition-colors hover:bg-white/10"
+                  className="rounded-lg border border-white/20 px-6 py-2.5 text-[13px] font-bold text-white transition-colors hover:bg-white/10"
                 >
                   Call {contact.phone}
                 </a>

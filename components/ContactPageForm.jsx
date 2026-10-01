@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { contact } from "@/lib/content";
+import { contact, serviceDetails, heroOffers } from "@/lib/content";
 
 const PRACTICE_TYPES = [
   "Physician Group",
@@ -49,16 +49,11 @@ const PRACTICE_SIZES = [
   "50+ Providers",
 ];
 
-const SERVICES = [
-  "Medical Billing & Claim Submission",
-  "Provider Credentialing",
-  "Payer Enrollment",
-  "Revenue Cycle Management (RCM)",
-  "Denial Management & Appeals",
-  "Payer Contracting & Negotiation",
-  "DME Billing",
-  "All Services / Not Sure Yet",
-];
+// Same services as the Services page, plus a catch-all
+const SERVICES = [...serviceDetails.map((s) => s.title), "Denial Management & A/R Recovery", "Multiple Services / Not Sure Yet"];
+
+const NO_OFFER = "No offer — just enquiring";
+const OFFERS = heroOffers.map((o) => o.title);
 
 const REFERRAL_SOURCES = [
   "Google / Search Engine",
@@ -91,6 +86,7 @@ const INITIAL = {
   specialty: "",
   practiceSize: "",
   service: "",
+  offer: "",
   timeline: "",
   referral: "",
   preferredContact: "",
@@ -115,6 +111,19 @@ export default function ContactPageForm() {
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+
+  // Offer cards on the home page link here as /contact?offer=<id> —
+  // pre-select that offer (and its matching service) in the form.
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("offer");
+    const offer = heroOffers.find((o) => o.id === id);
+    if (!offer) return;
+    const service = { credentialing: "Provider Credentialing", billing: "Medical Billing", ar: "Denial Management & A/R Recovery" }[offer.id];
+    // One-time read of the URL on mount
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setForm((f) => ({ ...f, offer: offer.title, service: f.service || service || "" }));
+  }, []);
 
   function set(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -144,8 +153,9 @@ export default function ContactPageForm() {
     return e;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+    setSubmitError("");
     const v = validate();
     if (Object.keys(v).length) {
       setErrors(v);
@@ -154,30 +164,45 @@ export default function ContactPageForm() {
       return;
     }
     setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, offer: form.offer === NO_OFFER ? "" : form.offer }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (data.errors) setErrors(data.errors);
+        setSubmitError(data.error || "Something went wrong. Please try again.");
+        return;
+      }
       setSubmitted(true);
-    }, 900);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch {
+      setSubmitError(`We couldn't send your enquiry. Please email ${contact.email} or call ${contact.phone}.`);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (submitted) {
     return (
-      <div className="flex min-h-[480px] flex-col items-center justify-center rounded-2xl border border-[var(--color-line)] bg-white p-12 text-center shadow-sm">
+      <div className="flex min-h-[400px] flex-col items-center justify-center rounded-2xl border border-[var(--color-line)] bg-white p-10 text-center shadow-sm">
         <div
-          className="flex h-20 w-20 items-center justify-center rounded-full"
+          className="flex h-16 w-16 items-center justify-center rounded-full"
           style={{ background: "linear-gradient(135deg, #0b8f87, #20c4d6)" }}
         >
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <path d="M20 6 9 17l-5-5" />
           </svg>
         </div>
-        <h2 className="mt-6 font-[family-name:var(--font-display)] text-2xl font-extrabold text-[var(--color-navy)]">
+        <h2 className="mt-5 font-[family-name:var(--font-display)] text-xl font-extrabold text-[var(--color-navy)]">
           Thank You, {form.firstName}!
         </h2>
-        <p className="mx-auto mt-3 max-w-sm text-[var(--color-muted)]">
-          We've received your enquiry and a member of our team will be in touch within one business day.
+        <p className="mx-auto mt-2 max-w-sm text-sm text-[var(--color-muted)]">
+          We&apos;ve received your enquiry and a member of our team will be in touch within one business day.
         </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link
             href="/"
             className="rounded-lg border border-[var(--color-line)] px-6 py-2.5 text-sm font-semibold text-[var(--color-navy)] transition-colors hover:border-[var(--color-teal)]/40"
@@ -197,10 +222,32 @@ export default function ContactPageForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-8">
+    <form onSubmit={handleSubmit} noValidate className="space-y-4">
+      {/* Offer being claimed — pre-filled from /contact?offer=… */}
+      {form.offer && form.offer !== NO_OFFER && (
+        <div
+          className="flex flex-wrap items-center gap-3 rounded-2xl p-[1.5px]"
+          style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b 45%, #20c4d6)" }}
+        >
+          <div className="flex w-full flex-wrap items-center gap-3 rounded-[15px] bg-white px-4 py-3">
+            <span className="rounded-full bg-gradient-to-r from-amber-400 to-orange-500 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-[#0b1f33]">
+              🔥 Offer applied
+            </span>
+            <p className="flex-1 text-sm font-semibold text-[var(--color-navy)]">{form.offer}</p>
+            <button
+              type="button"
+              onClick={() => set("offer", "")}
+              className="text-xs font-semibold text-[var(--color-muted)] hover:text-[var(--color-navy)]"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* ── Section 1: Personal Info ── */}
       <FormSection title="Your Information" number="01">
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           <Field id="firstName" label="First Name" required error={errors.firstName}>
             <input
               id="firstName"
@@ -228,7 +275,7 @@ export default function ContactPageForm() {
             />
           </Field>
         </div>
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           <Field id="email" label="Email Address" required error={errors.email}>
             <input
               id="email"
@@ -272,7 +319,7 @@ export default function ContactPageForm() {
 
       {/* ── Section 2: Practice Details ── */}
       <FormSection title="Practice Details" number="02">
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           <Field id="practiceType" label="Practice Type" required error={errors.practiceType}>
             <Select
               id="practiceType"
@@ -316,7 +363,16 @@ export default function ContactPageForm() {
             error={errors.service}
           />
         </Field>
-        <div className="grid gap-5 sm:grid-cols-2">
+        <Field id="offer" label="Claim an Offer">
+          <Select
+            id="offer"
+            value={form.offer}
+            onChange={(v) => set("offer", v)}
+            options={[...OFFERS, NO_OFFER]}
+            placeholder="Choose this month's offer (optional)…"
+          />
+        </Field>
+        <div className="grid gap-4 sm:grid-cols-2">
           <Field id="timeline" label="Implementation Timeline">
             <Select
               id="timeline"
@@ -339,16 +395,16 @@ export default function ContactPageForm() {
 
         {/* Challenges checklist */}
         <div>
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[var(--color-muted)]">
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-muted)]">
             Current Challenges <span className="font-normal normal-case tracking-normal text-[var(--color-muted)]/60">(select all that apply)</span>
           </p>
-          <div className="grid gap-2.5 sm:grid-cols-2">
+          <div className="grid gap-2 sm:grid-cols-2">
             {CHALLENGES.map((c) => {
               const checked = form.currentChallenges.includes(c);
               return (
                 <label
                   key={c}
-                  className={`flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 text-sm transition-all ${
+                  className={`flex cursor-pointer items-center gap-3 rounded-lg border px-3 py-2 text-[13px] transition-all ${
                     checked
                       ? "border-[var(--color-teal)]/40 bg-[var(--color-teal-tint)] text-[var(--color-navy)]"
                       : "border-[var(--color-line)] bg-[var(--color-bg)] text-[var(--color-muted)] hover:border-[var(--color-teal)]/20 hover:bg-white"
@@ -380,11 +436,11 @@ export default function ContactPageForm() {
           <textarea
             id="message"
             name="message"
-            rows={5}
+            rows={4}
             placeholder="Describe your current billing setup, biggest pain points, EHR/PM system in use, or anything else you'd like us to know before our call…"
             value={form.message}
             onChange={(e) => set("message", e.target.value)}
-            className="mt-0 w-full resize-none rounded-lg border border-[var(--color-line)] bg-[var(--color-bg)] px-3.5 py-2.5 text-sm text-[var(--color-ink)] outline-none transition-colors focus:border-[var(--color-navy)] focus:bg-white"
+            className="mt-0 w-full resize-none rounded-lg border border-[var(--color-line)] bg-[var(--color-bg)] px-3 py-2 text-sm text-[var(--color-ink)] outline-none transition-colors focus:border-[var(--color-navy)] focus:bg-white"
           />
         </Field>
         <Field id="referral" label="How Did You Hear About Us?">
@@ -399,7 +455,7 @@ export default function ContactPageForm() {
 
         {/* Consent */}
         <div>
-          <label className={`flex cursor-pointer items-start gap-3 rounded-lg border px-4 py-3.5 text-sm transition-all ${errors.consent ? "border-red-300 bg-red-50" : "border-[var(--color-line)] bg-[var(--color-bg)] hover:border-[var(--color-teal)]/20 hover:bg-white"}`}>
+          <label className={`flex cursor-pointer items-start gap-3 rounded-lg border px-3.5 py-3 text-[13px] transition-all ${errors.consent ? "border-red-300 bg-red-50" : "border-[var(--color-line)] bg-[var(--color-bg)] hover:border-[var(--color-teal)]/20 hover:bg-white"}`}>
             <span
               id="consent"
               className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-all ${
@@ -425,11 +481,16 @@ export default function ContactPageForm() {
       </FormSection>
 
       {/* Submit */}
-      <div className="pt-2">
+      <div className="pt-1">
+        {submitError && (
+          <p role="alert" className="mb-3 rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm text-red-600">
+            {submitError}
+          </p>
+        )}
         <button
           type="submit"
           disabled={submitting}
-          className="relative w-full overflow-hidden rounded-xl py-4 text-sm font-bold text-white shadow-[0_6px_28px_-6px_rgba(11,143,135,0.55)] transition-all hover:brightness-110 disabled:opacity-70"
+          className="relative w-full overflow-hidden rounded-xl py-3.5 text-sm font-bold text-white shadow-[0_6px_28px_-6px_rgba(11,143,135,0.55)] transition-all hover:brightness-110 disabled:opacity-70"
           style={{ background: "linear-gradient(135deg, #0b8f87, #20c4d6)" }}
         >
           {submitting ? (
@@ -455,17 +516,17 @@ export default function ContactPageForm() {
 
 function FormSection({ title, number, children }) {
   return (
-    <div className="rounded-2xl border border-[var(--color-line)] bg-white p-6 shadow-sm sm:p-8">
-      <div className="mb-6 flex items-center gap-3">
+    <div className="rounded-xl border border-[var(--color-line)] bg-white p-5 shadow-sm sm:p-6">
+      <div className="mb-4 flex items-center gap-3">
         <span
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold text-white"
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[11px] font-bold text-white"
           style={{ background: "linear-gradient(135deg, #0b1f33, #0b8f87)" }}
         >
           {number}
         </span>
-        <h3 className="font-[family-name:var(--font-display)] text-base font-bold text-[var(--color-navy)]">{title}</h3>
+        <h3 className="font-[family-name:var(--font-display)] text-[15px] font-bold text-[var(--color-navy)]">{title}</h3>
       </div>
-      <div className="space-y-5">{children}</div>
+      <div className="space-y-4">{children}</div>
     </div>
   );
 }
@@ -473,7 +534,7 @@ function FormSection({ title, number, children }) {
 function Field({ id, label, required, error, children }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--color-muted)]">
+      <label htmlFor={id} className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-[var(--color-muted)]">
         {label}
         {required && <span className="ml-1 text-[var(--color-teal)]">*</span>}
       </label>
@@ -491,7 +552,7 @@ function Select({ id, value, onChange, options, placeholder, error }) {
         name={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`w-full appearance-none rounded-lg border px-3.5 py-2.5 text-sm outline-none transition-colors focus:border-[var(--color-navy)] focus:bg-white ${
+        className={`w-full appearance-none rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:border-[var(--color-navy)] focus:bg-white ${
           error ? "border-red-300 bg-red-50" : "border-[var(--color-line)] bg-[var(--color-bg)]"
         } ${value ? "text-[var(--color-ink)]" : "text-[var(--color-muted)]"}`}
       >
@@ -508,7 +569,7 @@ function Select({ id, value, onChange, options, placeholder, error }) {
 }
 
 function inputCls(error) {
-  return `w-full rounded-lg border px-3.5 py-2.5 text-sm text-[var(--color-ink)] outline-none transition-colors focus:border-[var(--color-navy)] focus:bg-white ${
+  return `w-full rounded-lg border px-3 py-2 text-sm text-[var(--color-ink)] outline-none transition-colors focus:border-[var(--color-navy)] focus:bg-white ${
     error ? "border-red-300 bg-red-50" : "border-[var(--color-line)] bg-[var(--color-bg)]"
   }`;
 }

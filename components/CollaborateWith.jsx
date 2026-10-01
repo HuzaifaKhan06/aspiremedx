@@ -81,7 +81,7 @@ export default function CollaborateWith() {
     <section className="bg-white py-20">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal className="text-center">
-          <h2 className="font-[family-name:var(--font-display)] text-3xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-4xl">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl font-extrabold tracking-tight text-[var(--color-navy)] sm:text-3xl">
             We Collaborate With
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-[var(--color-muted)]">
@@ -95,7 +95,7 @@ export default function CollaborateWith() {
               <div className="group relative overflow-hidden rounded-2xl shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
                 {/* Gradient background */}
                 <div
-                  className={`bg-gradient-to-br ${item.gradient} relative flex h-48 items-center justify-center overflow-hidden`}
+                  className={`bg-gradient-to-br ${item.gradient} relative flex h-32 items-center justify-center overflow-hidden`}
                 >
                   {/* Hex pattern overlay */}
                   <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-10" aria-hidden xmlns="http://www.w3.org/2000/svg">
@@ -110,7 +110,7 @@ export default function CollaborateWith() {
                 </div>
 
                 {/* Content */}
-                <div className="border border-[var(--color-line)] border-t-0 rounded-b-2xl bg-white p-6">
+                <div className="border border-[var(--color-line)] border-t-0 rounded-b-2xl bg-white p-5">
                   <h3 className="font-[family-name:var(--font-display)] text-base font-bold text-[var(--color-navy)]">
                     {item.title}
                   </h3>

@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import ServiceIcon from "@/components/ServiceIcon";
 import { serviceDetails, serviceGroups, processSteps, processIntro, contact, cta } from "@/lib/content";
+import HeroBackground from "@/components/HeroBackground";
 
 export const metadata = {
   title: "Medical Billing, RCM & Practice Growth Services | AspireMedX",
@@ -38,6 +39,8 @@ export default function ServicesPage() {
           className="relative overflow-hidden"
           style={{ background: "linear-gradient(135deg, #0b1f33 0%, #173b57 55%, #0b3330 100%)" }}
         >
+          <HeroBackground src="/heroes/Services-Hero.webp" position="center 3%" />
+
           <style>{`
             @keyframes svc-float {
               0%, 100% { transform: translateY(0); }

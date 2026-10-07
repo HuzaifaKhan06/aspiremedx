@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ContactPageForm from "@/components/ContactPageForm";
 import { contact, heroOffers } from "@/lib/content";
+import HeroBackground from "@/components/HeroBackground";
 
 export const metadata = {
   title: "Contact Us | AspireMedX",
@@ -69,6 +70,8 @@ export default function ContactPage() {
           className="relative overflow-hidden"
           style={{ background: "linear-gradient(135deg, #0b1f33 0%, #173b57 55%, #0b3330 100%)" }}
         >
+          <HeroBackground src="/heroes/Contact-Hero.webp" position="center 4%" width="62%" />
+
           <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.06]" aria-hidden xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="contact-hex" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">

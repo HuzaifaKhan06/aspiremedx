@@ -6,6 +6,7 @@ import PlanCards from "./PlanCards";
 import CompareTable from "./CompareTable";
 import CustomBuilder from "./CustomBuilder";
 import QuoteModal from "./QuoteModal";
+import HeroBackground from "@/components/HeroBackground";
 
 const TABS = [
   {
@@ -60,6 +61,8 @@ export default function PricingClient() {
         className="relative overflow-hidden pb-24 pt-8"
         style={{ background: "linear-gradient(135deg, #0b1f33 0%, #173b57 55%, #0b2a22 100%)" }}
       >
+        <HeroBackground src="/heroes/Pricing-Hero.webp" centered />
+
         <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.045]" aria-hidden xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="pricing-hex" x="0" y="0" width="50" height="44" patternUnits="userSpaceOnUse">

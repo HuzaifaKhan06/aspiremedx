@@ -1,5 +1,6 @@
 import Counter from "./Counter";
 import Reveal from "./Reveal";
+import AnimatedSectionBg from "./AnimatedSectionBg";
 
 const stats = [
   { static: "$1.5B+", label: "Revenue Volume Managed Annually", sub: "Technology-enabled revenue cycle management across specialties." },
@@ -18,8 +19,19 @@ const stats = [
 
 export default function WhoWeAre() {
   return (
-    <section className="bg-[var(--color-bg)] py-20">
-      <div className="mx-auto max-w-6xl px-6">
+    <section className="relative overflow-hidden bg-[var(--color-bg)] py-20">
+      {/* Background photo with a light fade so the heading and cards stay readable */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <AnimatedSectionBg src="/heroes/HomePage-Numbers-Score-Bg.webp" />
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(180deg, rgba(243,248,250,0.82) 0%, rgba(243,248,250,0.6) 50%, rgba(243,248,250,0.82) 100%)" }}
+        />
+        <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[var(--color-bg)] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[var(--color-bg)] to-transparent" />
+      </div>
+
+      <div className="relative mx-auto max-w-6xl px-6">
         <Reveal className="mb-12 text-center">
           <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[var(--color-teal)]">
             Who We Are

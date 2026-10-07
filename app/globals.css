@@ -65,6 +65,135 @@ body {
   }
 }
 
+/* "We Collaborate With" cards (CollaborateWith.jsx).
+   Static by default. The hover focus animation only runs on large screens with
+   a real pointer, so phones and tablets pay no animation cost. */
+.collab-kicker { opacity: 0; max-height: 0; }
+.collab-tags { opacity: 0; }
+
+@media (min-width: 1024px) and (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .collab-card {
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.55s ease,
+      opacity 0.45s ease, filter 0.45s ease;
+    will-change: transform;
+  }
+  .collab-head { transition: height 0.55s cubic-bezier(0.22, 1, 0.36, 1); }
+  .collab-icon {
+    transition: top 0.6s cubic-bezier(0.22, 1, 0.36, 1), left 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+  }
+  .collab-body {
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.45s ease,
+      border-color 0.45s ease;
+  }
+  .collab-title, .collab-desc { transition: color 0.4s ease; }
+  .collab-kicker { transition: opacity 0.4s ease 0.1s, max-height 0.4s ease; }
+  .collab-tags {
+    transform: translateY(14px);
+    transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Hovered card lifts out of the grid toward the viewer */
+  .collab-card:hover {
+    z-index: 10;
+    transform: translateY(-18px) scale(1.04);
+    box-shadow: 0 40px 70px -25px rgba(11, 31, 51, 0.55), 0 0 0 1px rgba(32, 196, 214, 0.35);
+  }
+  .collab-grid > *:has(.collab-card:hover) { position: relative; z-index: 10; }
+  /* Everything else steps back so the hovered card has focus */
+  .collab-grid:has(.collab-card:hover) .collab-card:not(:hover) {
+    opacity: 0.45;
+    filter: blur(1.5px) saturate(0.7);
+    transform: scale(0.97);
+  }
+
+  .collab-card:hover .collab-head { height: 100%; }
+  .collab-card:hover .collab-icon {
+    top: 68%;
+    left: 80%;
+    transform: translate(-50%, -50%) scale(2.1) rotate(-8deg);
+    opacity: 0.18;
+  }
+  .collab-card:hover .collab-body {
+    transform: translateY(-6.25rem);
+    background-color: transparent;
+    border-color: transparent;
+  }
+  .collab-card:hover .collab-title { color: #ffffff; }
+  .collab-card:hover .collab-desc { color: rgba(255, 255, 255, 0.78); }
+  .collab-card:hover .collab-kicker { opacity: 1; max-height: 1.5rem; margin-bottom: 0.4rem; }
+  .collab-icon-tile { transition: opacity 0.4s ease; }
+  .collab-card:hover .collab-icon-tile { opacity: 0; }
+  .collab-card:hover .collab-tags {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.12s;
+  }
+}
+
+/* About page Mission / Vision / Approach photo cards (AboutMission.jsx).
+   Static on phones and tablets; the 3D lift + text re-layout only runs on
+   large screens with a real pointer. */
+@media (min-width: 1024px) and (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .pillar-grid { perspective: 1200px; }
+  .pillar-card {
+    transform-origin: 50% 100%;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s ease,
+      opacity 0.45s ease, filter 0.45s ease;
+    will-change: transform;
+  }
+  .pillar-img { transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1); }
+  .pillar-tint { transition: opacity 0.6s ease; }
+  .pillar-content { transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+  .pillar-icon {
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.4s ease,
+      border-color 0.4s ease, box-shadow 0.5s ease;
+  }
+  .pillar-bar { transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+  /* Body is trimmed to ~3 lines until hover, then the full text unfolds */
+  .pillar-body {
+    max-height: 4.9em;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent);
+    mask-image: linear-gradient(180deg, #000 55%, transparent);
+    transition: max-height 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .pillar-card:hover {
+    z-index: 10;
+    transform: translateY(-16px) rotateX(5deg) scale(1.03);
+    box-shadow: 0 45px 70px -30px rgba(11, 31, 51, 0.75), 0 0 0 1px rgba(32, 196, 214, 0.35);
+  }
+  .pillar-grid > *:has(.pillar-card:hover) { position: relative; z-index: 10; }
+  .pillar-grid:has(.pillar-card:hover) .pillar-card:not(:hover) {
+    opacity: 0.55;
+    filter: saturate(0.7);
+    transform: scale(0.97);
+  }
+  .pillar-card:hover .pillar-img { transform: scale(1.1); }
+  .pillar-card:hover .pillar-tint { opacity: 1; }
+  .pillar-card:hover .pillar-content { transform: translateY(-6px); }
+  .pillar-card:hover .pillar-icon {
+    transform: translateY(-4px) rotate(-8deg) scale(1.12);
+    background-color: rgba(32, 196, 214, 0.22);
+    border-color: rgba(32, 196, 214, 0.6);
+    box-shadow: 0 12px 24px -10px rgba(32, 196, 214, 0.6);
+  }
+  .pillar-card:hover .pillar-bar { width: 5rem; }
+  .pillar-card:hover .pillar-body {
+    max-height: 14em;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+/* Very slow drift for section background photos (AnimatedSectionBg) */
+@keyframes section-bg-drift {
+  0%   { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.05) translate(-1%, -1%); }
+}
+.section-bg-drift { animation: section-bg-drift 22s ease-in-out 2.2s infinite alternate; }
+
 /* Slow, understated pulse used sparingly on live/data indicators */
 @keyframes soft-pulse {
   0%, 100% { opacity: 1; }

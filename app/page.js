@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import CollaborateWith from "@/components/CollaborateWith";
 import WhoWeAre from "@/components/WhoWeAre";
 import WhatMakesDifferent from "@/components/WhatMakesDifferent";
+import TestimonialSlider from "@/components/TestimonialSlider";
 import ServicesCarousel from "@/components/ServicesCarousel";
 import SpecialtiesSection from "@/components/SpecialtiesSection";
 import WhyTrust from "@/components/WhyTrust";
@@ -18,6 +19,7 @@ export default function Home() {
         <CollaborateWith />
         <WhoWeAre />
         <WhatMakesDifferent />
+        <TestimonialSlider />
         <ServicesCarousel />
         <SpecialtiesSection />
         <WhyTrust />

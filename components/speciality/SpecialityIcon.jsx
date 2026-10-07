@@ -353,8 +353,69 @@ const icons = {
   ),
 };
 
-export default function SpecialityIcon({ slug, className = "h-10 w-10", title }) {
+// 3D palettes: gradient fills for --ic-1 / --ic-2 on a dark or light tile.
+const palettes3d = {
+  dark: {
+    p: ["#8ff6ff", "#20c4d6", "#0b8f87"],
+    s: ["#ffffff", "#e3f6f9", "#a9d9e2"],
+  },
+  light: {
+    p: ["#3fdbe9", "#0b8f87", "#075e5a"],
+    s: ["#b5f8ff", "#20c4d6", "#0e8fa0"],
+  },
+};
+
+export default function SpecialityIcon({ slug, className = "h-10 w-10", title, variant, cutout }) {
   const icon = icons[slug] ?? icons["internal-medicine-billing"];
+
+  // Optional glossy 3D rendering: gradient fills + a specular-lighting filter
+  // give the same duotone shapes a raised, lit look. `cutout` should match
+  // the tile colour behind the icon.
+  if (variant === "3d-dark" || variant === "3d-light") {
+    const pal = palettes3d[variant === "3d-dark" ? "dark" : "light"];
+    const id = `s3d-${variant}-${slug}`;
+    return (
+      <svg
+        viewBox="0 0 48 48"
+        className={className}
+        role={title ? "img" : undefined}
+        aria-hidden={title ? undefined : true}
+        aria-label={title}
+        overflow="visible"
+        style={{
+          "--ic-1": `url(#${id}-p)`,
+          "--ic-2": `url(#${id}-s)`,
+          "--ic-3": cutout,
+        }}
+      >
+        <defs>
+          <linearGradient id={`${id}-p`} x1="0" y1="0" x2="0.6" y2="1">
+            <stop offset="0%" stopColor={pal.p[0]} />
+            <stop offset="50%" stopColor={pal.p[1]} />
+            <stop offset="100%" stopColor={pal.p[2]} />
+          </linearGradient>
+          <linearGradient id={`${id}-s`} x1="0" y1="0" x2="0.6" y2="1">
+            <stop offset="0%" stopColor={pal.s[0]} />
+            <stop offset="55%" stopColor={pal.s[1]} />
+            <stop offset="100%" stopColor={pal.s[2]} />
+          </linearGradient>
+          <filter id={`${id}-f`} x="-25%" y="-25%" width="150%" height="160%" colorInterpolationFilters="sRGB">
+            {/* Bevel highlight from a top-left light */}
+            <feGaussianBlur in="SourceAlpha" stdDeviation="1.1" result="blur" />
+            <feSpecularLighting in="blur" surfaceScale="3.6" specularConstant="1.15" specularExponent="14" lightingColor="#ffffff" result="spec">
+              <fePointLight x="6" y="-6" z="38" />
+            </feSpecularLighting>
+            <feComposite in="spec" in2="SourceAlpha" operator="in" result="specIn" />
+            <feComposite in="SourceGraphic" in2="specIn" operator="arithmetic" k1="0" k2="1" k3="0.85" k4="0" result="lit" />
+            {/* Soft cast shadow underneath */}
+            <feDropShadow in="lit" dx="0" dy="2.2" stdDeviation="1.4" floodColor="#04121f" floodOpacity="0.5" />
+          </filter>
+        </defs>
+        <g filter={`url(#${id}-f)`}>{icon}</g>
+      </svg>
+    );
+  }
+
   return (
     <svg
       viewBox="0 0 48 48"

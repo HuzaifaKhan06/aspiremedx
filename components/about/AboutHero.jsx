@@ -1,4 +1,5 @@
 import Link from "next/link";
+import HeroBackground from "@/components/HeroBackground";
 
 export default function AboutHero() {
   return (
@@ -6,6 +7,8 @@ export default function AboutHero() {
       className="relative overflow-hidden"
       style={{ background: "linear-gradient(135deg, #0b1f33 0%, #173b57 55%, #0b3330 100%)" }}
     >
+      <HeroBackground src="/heroes/AboutUs-hero.webp" />
+
       {/* Hex pattern overlay */}
       <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.06]" aria-hidden xmlns="http://www.w3.org/2000/svg">
         <defs>

@@ -1,5 +1,13 @@
 import Reveal from "./Reveal";
 import Link from "next/link";
+import {
+  StethoscopeIcon,
+  FacilitiesIcon,
+  HubIcon,
+  AwardIcon,
+  DiagnosticsIcon,
+  GrowthIcon,
+} from "./CollaborateIcons";
 
 const collaborators = [
   {
@@ -7,72 +15,54 @@ const collaborators = [
     description:
       "Supporting practices of all sizes across 20+ clinical specialties with unified revenue cycle operations and dedicated billing expertise.",
     gradient: "from-[#0b1f33] to-[#0b8f87]",
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="h-10 w-10" aria-hidden>
-        <circle cx="24" cy="16" r="8" stroke="#20c4d6" strokeWidth="2" />
-        <path d="M8 40c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="#20c4d6" strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    ),
+    tags: ["20+ specialties", "Dedicated billers", "Unified reporting"],
+    // Stethoscope — physician practices
+    icon: <StethoscopeIcon />,
   },
   {
     title: "High-Growth & Complex Care Delivery Organizations",
     description:
       "Organizations managing high encounter volumes, multiple locations, and complex payer mixes under a single revenue framework.",
     gradient: "from-[#173b57] to-[#0b3330]",
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="h-10 w-10" aria-hidden>
-        <path d="M6 38V24l18-14 18 14v14H30V28h-12v10z" stroke="#20c4d6" strokeWidth="2" strokeLinejoin="round" />
-      </svg>
-    ),
+    tags: ["Multi-location", "High volume", "Complex payer mix"],
+    // Two care facilities — multi-location organizations
+    icon: <FacilitiesIcon />,
   },
   {
     title: "Healthcare Technology & Platform Partners",
     description:
       "EMR, PM, analytics, clearinghouse, and payer-connectivity platforms enabling a connected, efficient RCM ecosystem.",
     gradient: "from-[#0b3330] to-[#173b57]",
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="h-10 w-10" aria-hidden>
-        <rect x="6" y="6" width="36" height="28" rx="3" stroke="#20c4d6" strokeWidth="2" />
-        <path d="M16 42h16M24 34v8" stroke="#20c4d6" strokeWidth="2" strokeLinecap="round" />
-        <path d="M14 20l6 6 14-14" stroke="#20c4d6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
+    tags: ["EHR / PM", "Clearinghouses", "Integrations"],
+    // Connected hub — platform integrations
+    icon: <HubIcon />,
   },
   {
     title: "Centers of Excellence & Specialty Clinics",
     description:
       "Including oncology, cardiology, orthopedics, ophthalmology, dermatology, gastroenterology, pain management, and more.",
     gradient: "from-[#0b1f33] to-[#0b3330]",
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="h-10 w-10" aria-hidden>
-        <path d="M24 8L28 18H40L30 25L34 36L24 29L14 36L18 25L8 18H20Z" stroke="#20c4d6" strokeWidth="2" strokeLinejoin="round" />
-      </svg>
-    ),
+    tags: ["Oncology", "Cardiology", "Orthopedics"],
+    // Award badge with a medical cross — centers of excellence
+    icon: <AwardIcon />,
   },
   {
     title: "Diagnostics, Imaging & Ancillary Care Providers",
     description:
       "Revenue operations for labs, imaging centers, and ancillary services requiring tight compliance, accuracy, and fast claim cycles.",
     gradient: "from-[#173b57] to-[#0b8f87]",
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="h-10 w-10" aria-hidden>
-        <circle cx="22" cy="22" r="14" stroke="#20c4d6" strokeWidth="2" />
-        <path d="M32 32l8 8" stroke="#20c4d6" strokeWidth="2" strokeLinecap="round" />
-        <path d="M22 16v12M16 22h12" stroke="#20c4d6" strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    ),
+    tags: ["Labs", "Imaging centers", "Ancillary"],
+    // Scan frame with a pulse line — diagnostics & imaging
+    icon: <DiagnosticsIcon />,
   },
   {
     title: "Investors, MSOs & Enterprise Healthcare Platforms",
     description:
       "PE-backed networks and healthcare groups scaling through growth, consolidation, and digital transformation in revenue cycle.",
     gradient: "from-[#0b3330] to-[#0b1f33]",
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="h-10 w-10" aria-hidden>
-        <path d="M6 36L18 24L26 32L42 14" stroke="#20c4d6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        <circle cx="42" cy="14" r="3" fill="#20c4d6" />
-      </svg>
-    ),
+    tags: ["PE-backed", "MSOs", "Scale-ready RCM"],
+    // Briefcase with a growth trend — investors & enterprise
+    icon: <GrowthIcon />,
   },
 ];
 
@@ -89,14 +79,14 @@ export default function CollaborateWith() {
           </p>
         </Reveal>
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Hover focus effect lives in globals.css (.collab-*) and only runs on
+            large, hover-capable screens — phones/tablets get static cards. */}
+        <div className="collab-grid mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {collaborators.map((item, i) => (
-            <Reveal key={item.title} delay={i * 60}>
-              <div className="group relative overflow-hidden rounded-2xl shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-                {/* Gradient background */}
-                <div
-                  className={`bg-gradient-to-br ${item.gradient} relative flex h-32 items-center justify-center overflow-hidden`}
-                >
+            <Reveal key={item.title} delay={i * 60} className="h-full">
+              <div className="collab-card relative flex h-full flex-col overflow-hidden rounded-2xl shadow-md">
+                {/* Gradient header — expands to fill the card on hover */}
+                <div className={`collab-head absolute inset-x-0 top-0 h-32 overflow-hidden bg-gradient-to-br ${item.gradient}`}>
                   {/* Hex pattern overlay */}
                   <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-10" aria-hidden xmlns="http://www.w3.org/2000/svg">
                     <defs>
@@ -106,17 +96,45 @@ export default function CollaborateWith() {
                     </defs>
                     <rect width="100%" height="100%" fill={`url(#hex-${i})`} />
                   </svg>
-                  <div className="relative">{item.icon}</div>
+                </div>
+
+                {/* Icon — sinks into the background as a large watermark on hover */}
+                <div className="collab-icon pointer-events-none absolute left-1/2 top-16 h-[84px] w-[84px] -translate-x-1/2 -translate-y-1/2">
+                  {/* Raised glass tile behind the 3D icon */}
+                  <div
+                    className="collab-icon-tile absolute inset-0 rounded-2xl border border-white/20"
+                    style={{
+                      background: "linear-gradient(145deg, rgba(255,255,255,0.22), rgba(255,255,255,0.04))",
+                      boxShadow:
+                        "inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -6px 12px rgba(0,0,0,0.18), 0 18px 28px -12px rgba(0,0,0,0.55)",
+                    }}
+                  />
+                  <div className="absolute inset-2 drop-shadow-[0_6px_6px_rgba(0,0,0,0.35)]">{item.icon}</div>
                 </div>
 
                 {/* Content */}
-                <div className="border border-[var(--color-line)] border-t-0 rounded-b-2xl bg-white p-5">
-                  <h3 className="font-[family-name:var(--font-display)] text-base font-bold text-[var(--color-navy)]">
+                <div className="collab-body relative mt-32 flex-1 rounded-b-2xl border border-t-0 border-[var(--color-line)] bg-white p-5">
+                  <p className="collab-kicker hidden font-mono text-[10px] font-semibold uppercase tracking-widest text-[#20c4d6] lg:block">
+                    We serve
+                  </p>
+                  <h3 className="collab-title font-[family-name:var(--font-display)] text-base font-bold text-[var(--color-navy)]">
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">
+                  <p className="collab-desc mt-2 text-sm leading-relaxed text-[var(--color-muted)]">
                     {item.description}
                   </p>
+                </div>
+
+                {/* Tags — revealed on hover (desktop only) */}
+                <div className="collab-tags pointer-events-none absolute inset-x-5 bottom-5 hidden flex-wrap gap-2 lg:flex">
+                  {item.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-[#20c4d6]/40 bg-[#20c4d6]/10 px-3 py-1 text-[11px] font-semibold text-[#9ff0f8]"
+                    >
+                      {tag}
+                    </span>
+                  ))}
                 </div>
               </div>
             </Reveal>

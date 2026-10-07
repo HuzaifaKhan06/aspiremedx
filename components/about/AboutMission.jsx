@@ -1,8 +1,11 @@
+import Image from "next/image";
 import Reveal from "@/components/Reveal";
 
 const pillars = [
   {
     title: "Our Mission",
+    image: "/about/our-mission.webp",
+    imagePosition: "45% 45%",
     body: "To eliminate the administrative burden that slows healthcare organizations down — so providers can focus on delivering exceptional care while we ensure every dollar they've earned gets paid.",
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="h-8 w-8" aria-hidden>
@@ -15,6 +18,8 @@ const pillars = [
   },
   {
     title: "Our Vision",
+    image: "/about/our-vision.webp",
+    imagePosition: "40% 55%",
     body: "A healthcare revenue ecosystem where billing complexity, credentialing gaps, and denial backlogs are solved before they reach the provider — through expertise, automation, and accountability.",
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="h-8 w-8" aria-hidden>
@@ -26,6 +31,8 @@ const pillars = [
   },
   {
     title: "Our Approach",
+    image: "/about/our-approach.webp",
+    imagePosition: "35% 45%",
     body: "We combine specialized billing and credentialing expertise with a technology-agnostic model — working inside your existing systems, not replacing them — to deliver measurable, sustainable revenue improvements.",
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="h-8 w-8" aria-hidden>
@@ -109,21 +116,52 @@ export default function AboutMission() {
           </Reveal>
         </div>
 
-        {/* Three pillars */}
-        <div className="mt-12 grid gap-4 sm:grid-cols-3">
+        {/* Three pillars — photo cards. The 3D hover (see .pillar-* in
+            globals.css) only runs on large, hover-capable screens. */}
+        <div className="pillar-grid mt-12 grid gap-5 sm:grid-cols-3">
           {pillars.map((p, i) => (
-            <Reveal key={p.title} delay={i * 80}>
-              <div
-                className="relative overflow-hidden rounded-xl p-5"
-                style={{ background: "linear-gradient(160deg, #0b1f33, #0b2a22)" }}
-              >
+            <Reveal key={p.title} delay={i * 80} className="h-full">
+              <div className="pillar-card relative flex h-full min-h-[320px] flex-col justify-end overflow-hidden rounded-2xl p-6 shadow-[0_18px_40px_-24px_rgba(11,31,51,0.7)] lg:min-h-[380px]">
+                {/* Background photo */}
+                <Image
+                  src={p.image}
+                  alt=""
+                  fill
+                  sizes="(min-width: 640px) 33vw, 100vw"
+                  className="pillar-img object-cover"
+                  style={{ objectPosition: p.imagePosition }}
+                />
+                {/* Dark fade so the copy stays readable */}
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, rgba(11,31,51,0.30) 0%, rgba(11,31,51,0.72) 45%, rgba(11,31,51,0.95) 100%)",
+                  }}
+                  aria-hidden
+                />
+                {/* Teal wash that blooms on hover */}
+                <div
+                  className="pillar-tint absolute inset-0 opacity-0"
+                  style={{ background: "linear-gradient(160deg, rgba(11,143,135,0.35), rgba(11,31,51,0.55) 60%)" }}
+                  aria-hidden
+                />
                 {/* Corner hex accent */}
-                <svg className="pointer-events-none absolute -right-4 -top-4 h-20 w-20 opacity-10" aria-hidden>
+                <svg className="pointer-events-none absolute -right-4 -top-4 h-20 w-20 opacity-20" aria-hidden>
                   <polygon points="40,2 76,22 76,62 40,82 4,62 4,22" fill="none" stroke="#20c4d6" strokeWidth="1" />
                 </svg>
-                <div className="mb-3">{p.icon}</div>
-                <h3 className="font-[family-name:var(--font-display)] text-base font-bold text-white">{p.title}</h3>
-                <p className="mt-2 text-[13px] leading-relaxed text-white/55">{p.body}</p>
+                <span className="absolute right-6 top-6 rounded-full border border-[#20c4d6]/30 bg-[#0b1f33]/50 px-2.5 py-1 font-mono text-[10px] font-semibold tracking-widest text-[#20c4d6] backdrop-blur-sm">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+
+                <div className="pillar-content relative">
+                  <div className="pillar-icon mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-white/20 bg-white/10 backdrop-blur-sm">
+                    {p.icon}
+                  </div>
+                  <h3 className="font-[family-name:var(--font-display)] text-lg font-bold text-white">{p.title}</h3>
+                  <span aria-hidden className="pillar-bar mt-2 block h-0.5 w-10 rounded-full bg-gradient-to-r from-[#0b8f87] to-[#20c4d6]" />
+                  <p className="pillar-body mt-3 text-[13px] leading-relaxed text-white/75">{p.body}</p>
+                </div>
               </div>
             </Reveal>
           ))}

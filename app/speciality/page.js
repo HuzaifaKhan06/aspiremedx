@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import SpecialityExplorer from "@/components/speciality/SpecialityExplorer";
 import { specialities, featuredSpecialitySlugs, contact, cta } from "@/lib/content";
+import HeroBackground from "@/components/HeroBackground";
 
 export const metadata = {
   title: "Speciality Billing Services | AspireMedX",
@@ -30,6 +31,8 @@ export default function SpecialityPage() {
           className="relative overflow-hidden"
           style={{ background: "linear-gradient(135deg, #0b1f33 0%, #173b57 55%, #0b3330 100%)" }}
         >
+          <HeroBackground src="/heroes/Speciality-Hero.webp" position="center top" width="58%" />
+
           <style>{`
             @keyframes spec-float {
               0%, 100% { transform: translateY(0); }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { hero, cta, heroOffers } from "@/lib/content";
 import Counter from "./Counter";
+import HeroBackground from "@/components/HeroBackground";
 
 export default function Hero() {
   return (
@@ -11,6 +12,8 @@ export default function Hero() {
       className="relative overflow-hidden"
       style={{ background: "linear-gradient(135deg, #0b1f33 0%, #173b57 50%, #0b3330 100%)" }}
     >
+      <HeroBackground src="/heroes/Home-Hero.webp" />
+
       {/* Circuit / mesh SVG overlay */}
       <svg
         className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.07]"
@@ -46,7 +49,7 @@ export default function Hero() {
         aria-hidden
       />
 
-      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-8 px-6 pb-12 pt-8 lg:grid-cols-[1.2fr_1fr] lg:gap-10 lg:pb-14 lg:pt-10">
+      <div className="relative mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-8 px-6 pb-12 pt-8 lg:grid-cols-[1.2fr_1fr] lg:gap-10 lg:pb-14 lg:pt-10">
         <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-[#20c4d6]/30 bg-[#20c4d6]/10 px-3 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider text-[#20c4d6]">
             <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-[#20c4d6]" />
@@ -83,14 +86,14 @@ export default function Hero() {
           </div>
 
           {/* Stats row */}
-          <div className="mt-6 flex flex-wrap gap-6 border-t border-white/10 pt-5">
+          <div className="mt-6 grid grid-cols-3 gap-3 border-t border-white/10 pt-5 sm:flex sm:flex-wrap sm:gap-6">
             {[
               { value: 98, suffix: "%+", label: "First-pass clean claim rate" },
               { value: 30, prefix: "Up to ", suffix: "%", label: "A/R reduction" },
               { value: 120, suffix: "+", label: "Payer relationships" },
             ].map((stat, i) => (
-              <div key={stat.label} className={i > 0 ? "border-l border-white/10 pl-6" : ""}>
-                <p className="font-[family-name:var(--font-display)] text-xl font-extrabold text-white">
+              <div key={stat.label} className={i > 0 ? "border-l border-white/10 pl-3 sm:pl-6" : ""}>
+                <p className="font-[family-name:var(--font-display)] text-[17px] font-extrabold text-white sm:text-xl">
                   <Counter value={stat.value} prefix={stat.prefix} suffix={stat.suffix} onMount />
                 </p>
                 <p className="mt-0.5 text-[11px] text-white/50">{stat.label}</p>
